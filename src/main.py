@@ -1,12 +1,8 @@
-import graph
-import imgloader
-import imgwriter
+import os
+import gui
 
-il = imgloader.ImageLoader("small.bmp")
-il.show()
-
-x = graph.Graph(il.pixel_map, il.h, il.w)
-x.show()
-
-iw = imgwriter.ImageWriter(il.mode, il.pixel_map, (il.w, il.h))
-iw.write("out.bmp")
+if __name__ == "__main__":
+	app = gui.Application(None)
+	app.title("Maze Pathfinder")
+	app.iconbitmap(os.path.abspath("../assets/icon.ico"))
+	app.mainloop()
