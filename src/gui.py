@@ -37,10 +37,10 @@ class Application(Tkinter.Tk):
 		btn_import.grid(column = 3, row = 0)
 		# Button to solve the maze
 		btn_solve = Tkinter.Button(self, text = "Solve maze!", command = self.btn_solve_on_click)
-		btn_solve.grid(column = 0, row = 1, columnspan = 3)
+		btn_solve.grid(column = 0, row = 1, columnspan = 4)
 		# Info Label
-		self.lbl_info = Tkinter.Label(self, anchor = "w", text = "")
-		self.lbl_info.grid(column = 0, row = 2, columnspan = 3, sticky = "ew")
+		self.lbl_info = Tkinter.Label(self, anchor = "w", fg = "red", text = "")
+		self.lbl_info.grid(column = 0, row = 2, columnspan = 4, sticky = "ew")
 
 
 	def ent_filename_on_enter(self, event):
@@ -50,12 +50,14 @@ class Application(Tkinter.Tk):
 	def btn_import_on_click(self):
 		try:
 			self.img = imgloader.ImageLoader(self.ent_filename.get())
-			self.img.show()
-			self.grp = graph.Graph(self.img.pixel_map, self.img.h, self.img.w)
-			self.grp.show()
 		except:
-			self.lbl_info = "File not found!"
+			self.lbl_info.config(text = "File not found!")
+			return
 
+		self.lbl_info.config(text = "")
+		self.img.show()
+		self.grp = graph.Graph(self.img.pixel_map, self.img.h, self.img.w)
+		self.grp.show()
 
 	def btn_solve_on_click(self):
 		iw = imgwriter.ImageWriter(self.img.mode, self.img.pixel_map, (self.img.w, self.img.h))
