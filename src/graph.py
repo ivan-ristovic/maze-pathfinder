@@ -8,7 +8,7 @@ class Node:
 
 class Graph:
 
-	def form_graph(self, mat, h, w, x, y):
+	# def form_graph(self, mat, h, w, x, y):
 		# TODO
 
 
@@ -20,7 +20,7 @@ class Graph:
 		for i in range(w):
 			if pixel_matrix[0][i] == 1:
 				self.V.append(Node(0, i, "S"))
-				self.form_graph(pixel_matrix, h, w, 0, i)
+				# self.form_graph(pixel_matrix, h, w, 0, i)
 				break;
 
 
