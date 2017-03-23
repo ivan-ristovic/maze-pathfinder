@@ -65,7 +65,7 @@ class Application(Tkinter.Tk):
 			column = 0, row = 1, columnspan = 4,
 			padx = 10, pady = 10
 		)
-		
+
 		# Info Label
 		self.lbl_info = Tkinter.Label(self,
 			anchor = "w",
