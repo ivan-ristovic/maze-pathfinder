@@ -18,7 +18,7 @@ class Graph:
 
 		# location starting point searching paths
 		for i in range(w):
-			if pixel_matrix[0][i] == 0:
+			if pixel_matrix[0][i] == 1:
 				self.V.append(Node(0, i, []))
 				# self.form_graph(pixel_matrix, h, w, 0, i)
 				break;
@@ -30,8 +30,7 @@ class Graph:
 					# should I be a node?
 					# giving a code to every possible node
 					# 1,2,4,8 if top/right/down/left pixel is white
-					# 15 - code because 1 represents a black pixel
-					code = 15 - (pixel_matrix[i-1][j] + 2*pixel_matrix[i][j+1] + 4*pixel_matrix[i+1][j] + 8*pixel_matrix[i][j-1])
+					code = pixel_matrix[i-1][j] + 2*pixel_matrix[i][j+1] + 4*pixel_matrix[i+1][j] + 8*pixel_matrix[i][j-1]
 					if code != 5 and code != 10:
 						# I am a node!
 						# determing neighbors
@@ -45,7 +44,7 @@ class Graph:
 
 		# location of the ending node
 		for i in range(w):
-			if pixel_matrix[h-1][i] == 0:
+			if pixel_matrix[h-1][i] == 1:
 				self.V.append(Node(h-1, i, []))
 				break;
 

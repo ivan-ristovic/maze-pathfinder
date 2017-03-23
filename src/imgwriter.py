@@ -11,7 +11,7 @@ class ImageWriter:
 		pixel_list = []
 		for x in range(size[1]):
 			for y in range(size[0]):
-				if pixel_map[x][y] == 1:
+				if pixel_map[x][y] == 0:
 					pixel_list.append(0)
 				else:
 					pixel_list.append(255)

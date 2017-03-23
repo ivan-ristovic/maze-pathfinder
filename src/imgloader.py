@@ -19,7 +19,7 @@ class ImageLoader:
 		self.mode = im.mode
 
 		# Creating a zero-filled pixel map (0 for white (hall), 1 for non-white (wall))
-		self.pixel_map = [[0 for i in range(self.w)] for j in range(self.h)]
+		self.pixel_map = [[1 for i in range(self.w)] for j in range(self.h)]
 
 		# pixel_list iteration counter
 		it = 0
@@ -30,7 +30,7 @@ class ImageLoader:
 				# If the color in the pixel_list has a value different than
 				# white, then set the pixel_map value to 1 (meaning black)
 				if pixel_list[it] != 255:
-					self.pixel_map[i][j] = 1
+					self.pixel_map[i][j] = 0
 				it += 1
 
 
