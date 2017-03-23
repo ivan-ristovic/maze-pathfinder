@@ -1,4 +1,5 @@
 import Tkinter
+import sys
 
 import imgloader
 import imgwriter
@@ -17,6 +18,8 @@ class Application(Tkinter.Tk):
 		self.parent = parent
 		# Initializing GUI
 		self.initialize()
+
+		self.bind('<Escape>', sys.exit)
 
 
 	def initialize(self):
@@ -44,6 +47,7 @@ class Application(Tkinter.Tk):
 			sticky = "ew",
 			padx = 10, pady = 10
 		)
+		self.ent_filename.insert(-1, "small.bmp")
 		self.ent_filename.bind("<Return>", self.ent_filename_on_enter)
 
 		# Button to load image from file
