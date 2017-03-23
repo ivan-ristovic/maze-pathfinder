@@ -12,22 +12,24 @@ class ImageLoader:
 		# Opening image file
 		im = Image.open(filename)
 		# Getting values from the image object
-		color_list = list(im.getdata())
+		pixel_list = list(im.getdata())
 		# Getting image size
 		self.w, self.h = im.size
+		# Getting image mode
+		self.mode = im.mode
 
 		# Creating a zero-filled pixel map (0 for white (hall), 1 for non-white (wall))
 		self.pixel_map = [[0 for i in range(self.w)] for j in range(self.h)]
 
-		# color_list iteration counter
+		# pixel_list iteration counter
 		it = 0
 
 		# Filling out pixel_map
 		for i in range(self.h):
 			for j in range(self.w):
-				# If the color in the color_list has a value different than
+				# If the color in the pixel_list has a value different than
 				# white, then set the pixel_map value to 1 (meaning black)
-				if color_list[it] != 255:
+				if pixel_list[it] != 255:
 					self.pixel_map[i][j] = 1
 				it += 1
 
