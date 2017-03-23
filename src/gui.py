@@ -3,6 +3,7 @@ import Tkinter
 import imgloader
 import imgwriter
 import graph
+import dfs
 
 
 class Application(Tkinter.Tk):
@@ -101,3 +102,6 @@ class Application(Tkinter.Tk):
 	def btn_solve_on_click(self):
 		iw = imgwriter.ImageWriter(self.img.mode, self.img.pixel_map, (self.img.w, self.img.h))
 		iw.write("out.bmp")
+		dfsSolver = dfs.DFS(self.grp)
+		dfsSolver.solve()
+
