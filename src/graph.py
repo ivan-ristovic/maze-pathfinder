@@ -5,6 +5,9 @@ class Node:
 		self.neighbors = []
 		self.visited = False
 
+	def show(self):
+		print "(" + str(self.x) + ", " + str(self.y) + ")" 
+
 
 class Graph:
 	def __init__(self, pixel_matrix, h, w):
@@ -73,8 +76,9 @@ class Graph:
 	def show(self):
 		#print "Nodes:"
 		#for node in self.V:
-		#	print "(" + str(node.x) + ", " + str(node.y) + ")\t\tneighbors: ",
+		#	node.show()
+		#	print "\t\tneighbors: ",
 		#	for neighbor in node.neighbors:
-		#		print "(" + str(neighbor.x) + ", " + str(neighbor.y) + ") ",
+		#		neighbor.show()
 		#	print
 		print
