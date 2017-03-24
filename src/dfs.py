@@ -16,7 +16,7 @@ class DFS:
 		self.path.append(self.maze.start)
 
 		#self.solve_dfs_recursive(self.maze.start)
-		self.solve_dfs_recursive(self.maze.start)
+		self.solve_dfs_iterative()
 
 		if self.solved:
 			return self.path, self.steps
@@ -44,16 +44,17 @@ class DFS:
 	def solve_dfs_iterative(self):
 		node = self.maze.start
 		stack = deque()
-		stack.append(node)
+		stack.append((node, [node]))
 		self.visited[node.x * self.maze.w + node.y] = True
 
 		while (stack):
-			node = stack.pop()
+			(node, local_path) = stack.pop()
 			if node == self.maze.end:
 				self.solved = True
+				self.path = local_path
 				return
 			for n in node.neighbors:
 				if self.visited[n.x * self.maze.w + n.y] == False:
 					self.visited[n.x * self.maze.w + n.y] = True
-					stack.append(n)
+					stack.append((n, local_path + [n]))
 					self.steps += 1
