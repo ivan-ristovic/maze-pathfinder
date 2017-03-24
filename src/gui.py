@@ -82,12 +82,12 @@ class Application(Tkinter.Tk):
 		try:
 			self.img = imgloader.ImageLoader(self.ent_filename.get())
 		except:
-   			tkMessageBox.showerror("Error", "File not found!")
+			tkMessageBox.showerror("Error", "File not found!")
 			return
 
-		tkMessageBox.showinfo("Info", "Maze successfully imported!")
 		# Creating graph
 		self.grp = graph.Graph(self.img.pixel_map, self.img.h, self.img.w)
+		tkMessageBox.showinfo("Info", "Maze successfully imported!")
 
 
 	def btn_solve_on_click(self):
@@ -96,6 +96,7 @@ class Application(Tkinter.Tk):
 		# Traversing the graph and getting traverse node path
 		path, steps = dfs_solver.solve()
 		if len(path) == 0:		# FIXME MILANA
+			tkMessageBox.showerror("Error", "Maze not solved!")
 			return
 		# Creating new image writer so we can write our new image to the file
 		iw = imgwriter.ImageWriter(self.img.mode, self.img.pixel_map, (self.img.w, self.img.h))
