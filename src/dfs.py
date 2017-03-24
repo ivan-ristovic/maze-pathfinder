@@ -15,8 +15,8 @@ class DFS:
 		self.path = deque()
 		self.path.append(self.maze.start)
 
-		#self.solve_dfs_recursive(self.maze.start)
-		self.solve_dfs_iterative()
+		self.solve_dfs_recursive(self.maze.start)
+		#self.solve_dfs_iterative()
 
 		if self.solved:
 			return self.path, self.steps
@@ -37,7 +37,8 @@ class DFS:
 					self.solve_dfs_recursive(n)
 					if not self.solved:
 						self.path.pop()
-					self.solve_dfs_recursive(n)
+					else:
+						return
 
 
 	def solve_dfs_iterative(self):
