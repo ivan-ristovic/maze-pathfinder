@@ -14,9 +14,9 @@ class Graph:
 		self.h = h
 		self.V = []
 
-		# upper buffer is used to determine upper neighbor
+		# Upper buffer is used to determine upper neighbor
 		upper_buffer = [None] * w
-		# location starting point searching paths
+		# Location starting point searching paths
 		start_pos = 0;
 		for i in range(w):
 			if pixel_matrix[0][i] == 1:
@@ -30,30 +30,22 @@ class Graph:
 		for i in range(1, h - 1):
 			left_neighbor = None
 			for j in range(1, w - 1):
-				# if field is white
+				# If field is white
 				if pixel_matrix[i][j] == 1:
-					# should I be a node?
-					# giving a code to every possible node
+					# Should I be a node?
+					# Siving a code to every possible node
 					# 1,2,4,8 if top/right/down/left pixel is white
 					code = pixel_matrix[i-1][j] + 2*pixel_matrix[i][j+1] + 4*pixel_matrix[i+1][j] + 8*pixel_matrix[i][j-1]
 					if code != 5 and code != 10:
 						# I am a node!
 						new_node = Node(i, j, [])
-<<<<<<< HEAD
 
-=======
-						
->>>>>>> ab01fc474d077082c6f19028326a76065fc1b031
-						# determing horizontal neighbors
+						# Determing horizontal neighbors
 						if left_neighbor is not None:
 							new_node.neighbors.append(left_neighbor)
 							left_neighbor.neighbors.append(new_node)
-<<<<<<< HEAD
 
-=======
-						
->>>>>>> ab01fc474d077082c6f19028326a76065fc1b031
-						# determing vertical neighbors
+						# Determing vertical neighbors
 						if upper_buffer[j] is not None:
 							new_node.neighbors.append(upper_buffer[j]);
 							upper_buffer[j].neighbors.append(new_node)
@@ -63,12 +55,12 @@ class Graph:
 						upper_buffer[j] = new_node
 
 				elif pixel_matrix[i][j] == 0:
-					# this is a wall so the next node won't have left or upper neighbor
+					# This is a wall so the next node won't have left or upper neighbor
 					left_neighbor = None
 					upper_buffer[j] = None
 
 
-		# location of the ending node and its neighbors
+		# Location of the ending node and its neighbors
 		for i in range(w):
 			if pixel_matrix[h-1][i] == 1:
 				self.end = Node(h - 1, i, [])
