@@ -39,12 +39,20 @@ class Graph:
 					if code != 5 and code != 10:
 						# I am a node!
 						new_node = Node(i, j, [])
+<<<<<<< HEAD
 
+=======
+						
+>>>>>>> ab01fc474d077082c6f19028326a76065fc1b031
 						# determing horizontal neighbors
 						if left_neighbor is not None:
 							new_node.neighbors.append(left_neighbor)
 							left_neighbor.neighbors.append(new_node)
+<<<<<<< HEAD
 
+=======
+						
+>>>>>>> ab01fc474d077082c6f19028326a76065fc1b031
 						# determing vertical neighbors
 						if upper_buffer[j] is not None:
 							new_node.neighbors.append(upper_buffer[j]);
@@ -71,10 +79,10 @@ class Graph:
 
 
 	def show(self):
-		print "Nodes:"
-		for node in self.V:
-			print "(" + str(node.x) + ", " + str(node.y) + ")\t\tneighbors: ",
-			for neighbor in node.neighbors:
-				print "(" + str(neighbor.x) + ", " + str(neighbor.y) + ") ",
-			print
+		#print "Nodes:"
+		#for node in self.V:
+		#	print "(" + str(node.x) + ", " + str(node.y) + ")\t\tneighbors: ",
+		#	for neighbor in node.neighbors:
+		#		print "(" + str(neighbor.x) + ", " + str(neighbor.y) + ") ",
+		#	print
 		print
