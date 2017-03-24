@@ -4,6 +4,7 @@ import sys
 import imgloader
 import imgwriter
 import graph
+import dfs
 
 
 class Application(Tkinter.Tk):
@@ -102,6 +103,17 @@ class Application(Tkinter.Tk):
 		self.grp = graph.Graph(self.img.pixel_map, self.img.h, self.img.w)
 		self.grp.show()		# TODO remove
 
+
 	def btn_solve_on_click(self):
+		# Creating new solver using DFS
+		dfs_solver = dfs.DFS(self.grp)
+		# Traversing the graph and getting traverse node path
+		path = dfs_solver.solve()
+		if len(path) == 0:		# FIXME MILANA
+			return
+		# Creating new image writer so we can write our new image to the file
 		iw = imgwriter.ImageWriter(self.img.mode, self.img.pixel_map, (self.img.w, self.img.h))
-		iw.write("out.bmp")
+		# Applying path to image module
+		iw.apply_path(path, self.img.pixel_map, (self.img.w, self.img.h))
+		# Writing our image to output file
+		iw.write("new.bmp")
