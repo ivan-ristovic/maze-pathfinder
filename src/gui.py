@@ -1,4 +1,5 @@
 import Tkinter
+import tkMessageBox
 import sys
 
 import imgloader
@@ -47,7 +48,7 @@ class Application(Tkinter.Tk):
 			sticky = "ew",
 			padx = 10, pady = 10
 		)
-		self.ent_filename.insert(-1, "small.bmp")
+		self.ent_filename.insert(-1, "normal.bmp")
 		self.ent_filename.bind("<Return>", self.ent_filename_on_enter)
 
 		# Button to load image from file
@@ -71,18 +72,6 @@ class Application(Tkinter.Tk):
 			padx = 10, pady = 10
 		)
 
-		# Info Label
-		self.lbl_info = Tkinter.Label(self,
-			anchor = "w",
-			fg = "red",
-			text = ""
-		)
-		self.lbl_info.grid(
-			column = 0, row = 2, columnspan = 4,
-			sticky = "ew",
-			padx = 10, pady = 10
-		)
-
 
 	def ent_filename_on_enter(self, event):
 		self.btn_import_on_click()
@@ -93,24 +82,22 @@ class Application(Tkinter.Tk):
 		try:
 			self.img = imgloader.ImageLoader(self.ent_filename.get())
 		except:
-			self.lbl_info.config(text = "File not found!")
+   			tkMessageBox.showerror("Error", "File not found!")
 			return
 
-		self.lbl_info.config(text = "")
-		self.img.show()		# TODO remove
-
+		tkMessageBox.showinfo("Info", "Maze successfully imported!")
 		# Creating graph
 		self.grp = graph.Graph(self.img.pixel_map, self.img.h, self.img.w)
-		self.grp.show()		# TODO remove
 
 
 	def btn_solve_on_click(self):
 		# Creating new solver using DFS
 		dfs_solver = dfs.DFS(self.grp)
 		# Traversing the graph and getting traverse node path
-		path = dfs_solver.solve()
+		path, steps = dfs_solver.solve()
 		if len(path) == 0:		# FIXME MILANA
 			return
+		tkMessageBox.showinfo("Info", "Solved the maze in " + str(steps) + " steps!")
 		# Creating new image writer so we can write our new image to the file
 		iw = imgwriter.ImageWriter(self.img.mode, self.img.pixel_map, (self.img.w, self.img.h))
 		# Applying path to image module

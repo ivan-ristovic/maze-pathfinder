@@ -2,30 +2,25 @@ import graph
 from collections import deque
 
 class DFS:
+
+	# Constructor
 	def __init__(self, maze):
-		self.steps = 0
-		self.solved = False
-		self.visited = [False] * maze.w * maze.h
 		self.maze = maze
 
+
 	def solve(self):
+		self.steps = 0
 		self.solved = False
+		self.visited = [False] * self.maze.w * self.maze.h
 		self.path = deque()
 		self.path.append(self.maze.start)
 		self.solve_dfs_recursive(self.maze.start)
 
 		if self.solved:
-			print "Solved in: " , self.steps , "steps"
-			return self.path
+			return self.path, self.steps
 		else:
 			return []
 
-		self.solve_dfs_recursive(self.maze.start)	
-		print "steps: " + str(self.steps)
-		if self.solved:
-			print "Solved!"
-		else:
-			print "Not solved!"
 
 	def solve_dfs_recursive(self, node):
 		if node == self.maze.end:
@@ -41,6 +36,3 @@ class DFS:
 					if not self.solved:
 						self.path.pop()
 					self.solve_dfs_recursive(n)
-
-
-
