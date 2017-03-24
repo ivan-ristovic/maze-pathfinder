@@ -113,14 +113,7 @@ class Application(Tkinter.Tk):
 			return
 		# Creating new image writer so we can write our new image to the file
 		iw = imgwriter.ImageWriter(self.img.mode, self.img.pixel_map, (self.img.w, self.img.h))
-<<<<<<< HEAD
 		# Applying path to image module
 		iw.apply_path(path, self.img.pixel_map, (self.img.w, self.img.h))
 		# Writing our image to output file
 		iw.write("new.bmp")
-=======
-		iw.write("out.bmp")
-		dfsSolver = dfs.DFS(self.grp)
-		dfsSolver.solve()
-
->>>>>>> ab01fc474d077082c6f19028326a76065fc1b031
