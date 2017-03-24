@@ -26,13 +26,13 @@ class ImageWriter:
 				start = min(curr.x, prev.x)
 				end = max(curr.x, prev.x)
 				while start != end:
-					pixel_map[start][prev.y] = 0	# TODO RGB
+					pixel_map[start][prev.y] = 2
 					start += 1
 			else:	# Vertical path
 				start = min(curr.y, prev.y)
 				end = max(curr.y, prev.y)
 				while start != end:
-					pixel_map[prev.x][start] = 0	# TODO RGB
+					pixel_map[prev.x][start] = 2
 					start += 1
 
 		self.img.putdata(self.map_to_list(pixel_map, map_size))
@@ -45,8 +45,10 @@ class ImageWriter:
 		for x in range(map_size[1]):
 			for y in range(map_size[0]):
 				if pixel_map[x][y] == 0:
-					pixel_list.append(0)
+					pixel_list.append((0, 0, 0))
+				elif pixel_map[x][y] == 1:
+					pixel_list.append((255, 255, 255))
 				else:
-					pixel_list.append(255)
+					pixel_list.append((255, 0, 0))
 
 		return pixel_list
