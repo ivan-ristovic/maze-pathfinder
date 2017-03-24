@@ -97,10 +97,11 @@ class Application(Tkinter.Tk):
 		path, steps = dfs_solver.solve()
 		if len(path) == 0:		# FIXME MILANA
 			return
-		tkMessageBox.showinfo("Info", "Solved the maze in " + str(steps) + " steps!")
 		# Creating new image writer so we can write our new image to the file
 		iw = imgwriter.ImageWriter(self.img.mode, self.img.pixel_map, (self.img.w, self.img.h))
 		# Applying path to image module
 		iw.apply_path(path, self.img.pixel_map, (self.img.w, self.img.h))
 		# Writing our image to output file
 		iw.write("new.bmp")
+
+		tkMessageBox.showinfo("Info", "Solved the maze in " + str(steps) + " steps!")
