@@ -89,8 +89,8 @@ class Application(Tkinter.Tk):
 			variable = self.rbSelectedValue,
 			value = 2
 		)
-		rb_DFS.grid(column = 2, row = 1)
-		rb_BFS.grid(column = 3, row = 1)
+		rb_DFS.grid(column = 1, row = 1, padx = 5)
+		rb_BFS.grid(column = 1, row = 2, padx = 5)
 		rb_DFS.select()
 
 		# Button to solve the maze
@@ -100,8 +100,9 @@ class Application(Tkinter.Tk):
 			command = self.btn_solve_on_click
 		)
 		btn_solve.grid(
-			column = 0, row = 2, columnspan = 4,
-			padx = 10, pady = 10
+			column = 2, row = 1,
+			columnspan = 2,
+			padx = 20, pady = 10
 		)
 
 
@@ -144,7 +145,7 @@ class Application(Tkinter.Tk):
 		if self.rbSelectedValue.get() == 1:
 			graph_traverser = dfs.DFS(self.grp)
 		elif self.rbSelectedValue.get() == 2:
-			graph_traverser = dfs.BFS(self.grp)
+			graph_traverser = bfs.BFS(self.grp)
 
 		# Traversing the graph and getting traverse node path
 		path, steps = graph_traverser.traverse()

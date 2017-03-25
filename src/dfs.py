@@ -31,7 +31,7 @@ class DFS(traverser.Traverser):
 			# Now we need to check if that node has visited neighbors
 			has_nonvisited_neighbors = False
 			for n in node.neighbors:
-				# If we find one who isn't visited
+				# If we find one that isn't visited
 				if self.visited[n.x * self.maze.w + n.y] == False:
 					# Put it on top of the stack and mark it as visited
 					has_nonvisited_neighbors = True
