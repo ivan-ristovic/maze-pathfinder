@@ -1,22 +1,18 @@
 import graph
+import traverser
 from collections import deque
 
-class DFS:
+class DFS(traverser.Traverser):
 
-	# Constructor
-	def __init__(self, maze):
-		self.maze = maze
-
-
-	def solve(self):
+	def traverse(self):
 		self.steps = 0
 		self.solved = False
 		self.visited = [False] * self.maze.w * self.maze.h
 		self.path = deque()
 		self.path.append(self.maze.start)
 
-		#self.solve_dfs_recursive(self.maze.start)
-		self.solve_dfs_iterative()
+		#self.dfs_traverse_recursive(self.maze.start)
+		self.dfs_traverse_iterative()
 
 		if self.solved:
 			return self.path, self.steps
@@ -24,7 +20,7 @@ class DFS:
 			return [], 0
 
 
-	def solve_dfs_recursive(self, node):
+	def dfs_traverse_recursive(self, node):
 		if node == self.maze.end:
 			self.solved = True
 			return
@@ -34,14 +30,14 @@ class DFS:
 				if self.visited[n.x * self.maze.w + n.y] == False:
 					self.steps = self.steps + 1
 					self.path.append(n)
-					self.solve_dfs_recursive(n)
+					self.dfs_traverse_recursive(n)
 					if not self.solved:
 						self.path.pop()
 					else:
 						return
 
 
-	def solve_dfs_iterative(self):
+	def dfs_traverse_iterative(self):
 		node = self.maze.start
 		stack = deque()
 		stack.append((node, [node]))

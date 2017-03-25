@@ -5,6 +5,7 @@ import sys
 import imgloader
 import imgwriter
 import graph
+import traverser
 import dfs
 
 
@@ -111,17 +112,20 @@ class Application(Tkinter.Tk):
 		if self.grp is None or self.img is None:
 			tkMessageBox.showerror("Error", "Please load a maze first!")
 			return
-		# Creating new solver using DFS
-		dfs_solver = dfs.DFS(self.grp)
+
+		# Creating new graph traverser 
+		graph_traverser = dfs.DFS(self.grp)
 		# Traversing the graph and getting traverse node path
-		path, steps = dfs_solver.solve()
+		path, steps = graph_traverser.traverse()
 		if path == []:		# FIXME MILANA
 			tkMessageBox.showerror("Error", "Maze not solved!")
 			return
+
 		# Creating new image writer so we can write our new image to the file
 		iw = imgwriter.ImageWriter(self.img.mode, self.img.pixel_map, (self.img.w, self.img.h))
 		# Applying path to image module
 		iw.apply_path(path, self.img.pixel_map, (self.img.w, self.img.h))
+
 		# Writing our image to output file
 		iw.write(self.ent_filename.get())
 		tkMessageBox.showinfo("Info", "Solved the maze in " + str(steps) + " steps!")
