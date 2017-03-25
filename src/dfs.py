@@ -1,4 +1,3 @@
-import graph
 import traverser
 import tkMessageBox
 from collections import deque
