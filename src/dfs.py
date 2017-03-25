@@ -4,10 +4,9 @@ from collections import deque
 
 class DFS(traverser.Traverser):
 
+	# Override
 	def traverse(self):
-		self.steps = 0
-		self.solved = False
-		self.visited = [False] * self.maze.w * self.maze.h
+		self.initialize()
 		self.path = deque()
 		self.path.append(self.maze.start)
 

@@ -42,7 +42,6 @@ class ImageWriter:
 		self.img.putdata(self.map_to_list(pixel_map, map_size))
 
 
-
 	# Transforms pixel map to pixel list
 	def map_to_list(self, pixel_map, map_size):
 		# Since we saved the pixels in a matrix, we now need to transform it back to list
