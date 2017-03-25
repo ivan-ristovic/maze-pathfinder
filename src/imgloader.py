@@ -31,7 +31,7 @@ class ImageLoader:
 		# Filling out pixel_map
 		for i in range(self.h):
 			for j in range(self.w):
-				if pixel_list[it] != (255, 255, 255):
+				if pixel_list[it] < (125, 125, 125):
 					self.pixel_map[i][j] = 0
 				it += 1
 

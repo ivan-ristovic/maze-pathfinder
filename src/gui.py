@@ -123,5 +123,5 @@ class Application(Tkinter.Tk):
 		# Applying path to image module
 		iw.apply_path(path, self.img.pixel_map, (self.img.w, self.img.h))
 		# Writing our image to output file
-		iw.write("output.bmp")
+		iw.write(self.ent_filename.get())
 		tkMessageBox.showinfo("Info", "Solved the maze in " + str(steps) + " steps!")

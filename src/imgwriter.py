@@ -1,3 +1,4 @@
+import os
 from PIL import Image
 
 class ImageWriter:
@@ -13,7 +14,10 @@ class ImageWriter:
 
 	# Saves the module to file with a given name
 	def write(self, filename):
-		self.img.save(filename)
+		parent_dir, curr_dir = os.path.split(os.getcwd())
+		mazes_path = os.path.join(parent_dir, "mazes")
+		new_filename = os.path.join(mazes_path, "out_" + filename)
+		self.img.save(new_filename)
 
 
 	# Applies the path to the pixel_map
