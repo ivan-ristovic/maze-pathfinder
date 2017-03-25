@@ -1,5 +1,5 @@
-# Image examples
-*.bmp
+# Program output
+src/*.bmp
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -86,7 +86,10 @@ class Application(Tkinter.Tk):
 		try:
 			self.img = imgloader.ImageLoader(self.ent_filename.get())
 		except:
-			tkMessageBox.showerror("Error", "File not found!")
+			tkMessageBox.showerror("Error",
+				"File not found!\n" +
+				"Make sure that the maze you are loading is in assets folder!"
+			)
 			self.img = None
 			return
 
@@ -98,7 +101,7 @@ class Application(Tkinter.Tk):
 				"Invalid image!\n" +
 				"Image must have a black border and only one entry and exit point\n" +
 				"Also, the exit point must not have a black square above it."
-				)
+			)
 			self.grp = None
 			return
 		tkMessageBox.showinfo("Info", "Maze successfully imported!")
@@ -106,7 +109,7 @@ class Application(Tkinter.Tk):
 
 	def btn_solve_on_click(self):
 		if self.grp is None or self.img is None:
-			tkMessageBox.showerror("Error", "Please load an image first!")
+			tkMessageBox.showerror("Error", "Please load a maze first!")
 			return
 		# Creating new solver using DFS
 		dfs_solver = dfs.DFS(self.grp)
@@ -120,6 +123,5 @@ class Application(Tkinter.Tk):
 		# Applying path to image module
 		iw.apply_path(path, self.img.pixel_map, (self.img.w, self.img.h))
 		# Writing our image to output file
-		iw.write("new.bmp")
-
+		iw.write("output.bmp")
 		tkMessageBox.showinfo("Info", "Solved the maze in " + str(steps) + " steps!")

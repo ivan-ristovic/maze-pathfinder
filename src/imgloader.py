@@ -1,3 +1,4 @@
+import os
 from PIL import Image
 
 class ImageLoader:
@@ -10,7 +11,9 @@ class ImageLoader:
 		self.w = 0
 
 		# Opening image file
-		im = Image.open(filename)
+		parent_dir, curr_dir = os.path.split(os.getcwd())
+		mazes_path = os.path.join(parent_dir, "mazes")
+		im = Image.open(os.path.join(mazes_path, filename))
 		im = im.convert("RGB")
 		# Getting values from the image object
 		pixel_list = list(im.getdata())
