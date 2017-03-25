@@ -7,6 +7,7 @@ import imgwriter
 import graph
 import traverser
 import dfs
+import dijkstra
 
 
 class Application(Tkinter.Tk):
@@ -89,8 +90,14 @@ class Application(Tkinter.Tk):
 			variable = self.rbSelectedValue,
 			value = 2
 		)
+		rb_Dijkstra = Tkinter.Radiobutton(self,
+			text = "Dijkstra",
+			variable = self.rbSelectedValue,
+			value = 3
+		)
 		rb_DFS.grid(column = 1, row = 1, padx = 5)
 		rb_BFS.grid(column = 1, row = 2, padx = 5)
+		rb_Dijkstra.grid(column = 1, row = 3, padx = 5)
 		rb_DFS.select()
 
 		# Button to solve the maze
@@ -146,6 +153,8 @@ class Application(Tkinter.Tk):
 			graph_traverser = dfs.DFS(self.grp)
 		elif self.rbSelectedValue.get() == 2:
 			graph_traverser = bfs.BFS(self.grp)
+		elif self.rbSelectedValue.get() == 3:
+			graph_traverser = dijkstra.Dijkstra(self.grp)
 
 		# Traversing the graph and getting traverse node path
 		path, steps = graph_traverser.traverse()
