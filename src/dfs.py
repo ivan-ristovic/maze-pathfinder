@@ -1,5 +1,6 @@
 import graph
 import traverser
+import tkMessageBox
 from collections import deque
 
 class DFS(traverser.Traverser):
@@ -10,7 +11,11 @@ class DFS(traverser.Traverser):
 		self.path = deque()
 		self.path.append(self.maze.start)
 
-		self.dfs_traverse_iterative()
+		query = tkMessageBox.askquestion("DFS", "Prefer iterative over recursive?")
+		if query == "yes":
+			self.dfs_traverse_iterative()
+		else:
+			self.dfs_traverse_recursive(self.maze.start)
 
 		return list(self.path), self.steps
 
@@ -56,7 +61,6 @@ class DFS(traverser.Traverser):
 			#                 we are sure that it is a dead end
 
 
-	# Recursive variant, deprecated
 	def dfs_traverse_recursive(self, node):
 		if node == self.maze.end:
 			self.solved = True
