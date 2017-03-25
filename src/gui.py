@@ -20,6 +20,10 @@ class Application(Tkinter.Tk):
 		# Initializing GUI
 		self.initialize()
 
+		# Variables
+		self.grp = None
+		self.img = None
+
 		self.bind('<Escape>', sys.exit)
 
 
@@ -83,19 +87,32 @@ class Application(Tkinter.Tk):
 			self.img = imgloader.ImageLoader(self.ent_filename.get())
 		except:
 			tkMessageBox.showerror("Error", "File not found!")
+			self.img = None
 			return
 
 		# Creating graph
-		self.grp = graph.Graph(self.img.pixel_map, self.img.h, self.img.w)
+		try:
+			self.grp = graph.Graph(self.img.pixel_map, self.img.h, self.img.w)
+		except:
+			tkMessageBox.showerror("Error",
+				"Invalid image!\n" +
+				"Image must have a black border and only one entry and exit point\n" +
+				"Also, the exit point must not have a black square above it."
+				)
+			self.grp = None
+			return
 		tkMessageBox.showinfo("Info", "Maze successfully imported!")
 
 
 	def btn_solve_on_click(self):
+		if self.grp is None or self.img is None:
+			tkMessageBox.showerror("Error", "Please load an image first!")
+			return
 		# Creating new solver using DFS
 		dfs_solver = dfs.DFS(self.grp)
 		# Traversing the graph and getting traverse node path
 		path, steps = dfs_solver.solve()
-		if len(path) == 0:		# FIXME MILANA
+		if path == []:		# FIXME MILANA
 			tkMessageBox.showerror("Error", "Maze not solved!")
 			return
 		# Creating new image writer so we can write our new image to the file
