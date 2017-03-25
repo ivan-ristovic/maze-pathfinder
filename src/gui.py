@@ -66,6 +66,33 @@ class Application(Tkinter.Tk):
 			padx = 10, pady = 10
 		)
 
+		# "Method" label
+		lbl_method = Tkinter.Label(self,
+			anchor = "w",
+			text = "Traverse method:"
+		)
+		lbl_method.grid(
+			column = 0, row = 1,
+			sticky = "ew",
+			padx = 5, pady = 10
+		)
+
+		# Radio buttons for the traverse method
+		self.rbSelectedValue = Tkinter.IntVar()
+		rb_DFS = Tkinter.Radiobutton(self,
+			text = "DFS",
+			variable = self.rbSelectedValue,
+			value = 1
+		)
+		rb_BFS = Tkinter.Radiobutton(self,
+			text  =  "BFS",
+			variable = self.rbSelectedValue,
+			value = 2
+		)
+		rb_DFS.grid(column = 2, row = 1)
+		rb_BFS.grid(column = 3, row = 1)
+		rb_DFS.select()
+
 		# Button to solve the maze
 		btn_solve = Tkinter.Button(self,
 			text = "Solve maze!",
@@ -73,7 +100,7 @@ class Application(Tkinter.Tk):
 			command = self.btn_solve_on_click
 		)
 		btn_solve.grid(
-			column = 0, row = 1, columnspan = 4,
+			column = 0, row = 2, columnspan = 4,
 			padx = 10, pady = 10
 		)
 
@@ -113,8 +140,12 @@ class Application(Tkinter.Tk):
 			tkMessageBox.showerror("Error", "Please load a maze first!")
 			return
 
-		# Creating new graph traverser 
-		graph_traverser = dfs.DFS(self.grp)
+		# Creating new graph traverser
+		if self.rbSelectedValue.get() == 1:
+			graph_traverser = dfs.DFS(self.grp)
+		elif self.rbSelectedValue.get() == 2:
+			graph_traverser = dfs.BFS(self.grp)
+
 		# Traversing the graph and getting traverse node path
 		path, steps = graph_traverser.traverse()
 		if path == []:		# FIXME MILANA
