@@ -36,13 +36,20 @@ class Application(Tkinter.Tk):
 		# Our window will not be resizable by default
 		self.resizable(False, False)
 
+		# Main menu
+		menu_MainMenu = Tkinter.Menu(self)
+		menu_MainMenu.add_command(label = "Help", command = sys.exit)	# TODO
+		menu_MainMenu.add_command(label = "About", command = sys.exit)	# TODO
+		menu_MainMenu.add_command(label = "Exit", command = sys.exit)
+		self.config(menu = menu_MainMenu)
+
 		# Filename label
 		lbl_filename = Tkinter.Label(self,
 			anchor = "w",
 			text = "Filename: "
 		)
 		lbl_filename.grid(
-			column = 0, row = 0, columnspan = 2,
+			column = 0, row = 0,
 			sticky = "ew",
 			padx = 10, pady = 10
 		)
@@ -50,7 +57,7 @@ class Application(Tkinter.Tk):
 		# Entry for filename
 		self.ent_filename = Tkinter.Entry(self)
 		self.ent_filename.grid(
-			column = 2, row = 0,
+			column = 1, row = 0,
 			sticky = "ew",
 			padx = 10, pady = 10
 		)
@@ -63,41 +70,39 @@ class Application(Tkinter.Tk):
 			command = self.btn_import_on_click
 		)
 		btn_import.grid(
-			column = 3, row = 0,
-			padx = 10, pady = 10
+			column = 2, row = 0,
+			padx = 5, pady = 5
 		)
 
-		# "Method" label
-		lbl_method = Tkinter.Label(self,
-			anchor = "w",
-			text = "Traverse method:"
-		)
-		lbl_method.grid(
-			column = 0, row = 1,
-			sticky = "ew",
-			padx = 5, pady = 10
-		)
-
+		# Group for traverse method radio buttons
+		grp_Method = Tkinter.LabelFrame(self, text = "Traverse method:", padx = 5, pady = 5)
+		grp_Method.grid(column = 0, row = 1, padx = 10, pady = 5, columnspan = 3)
 		# Radio buttons for the traverse method
 		self.rbSelectedValue = Tkinter.IntVar()
-		rb_DFS = Tkinter.Radiobutton(self,
+		rb_DFS = Tkinter.Radiobutton(grp_Method,
 			text = "DFS",
 			variable = self.rbSelectedValue,
 			value = 1
 		)
-		rb_BFS = Tkinter.Radiobutton(self,
+		rb_BFS = Tkinter.Radiobutton(grp_Method,
 			text  =  "BFS",
 			variable = self.rbSelectedValue,
 			value = 2
 		)
-		rb_Dijkstra = Tkinter.Radiobutton(self,
+		rb_Dijkstra = Tkinter.Radiobutton(grp_Method,
 			text = "Dijkstra",
 			variable = self.rbSelectedValue,
 			value = 3
 		)
+		rb_Astar = Tkinter.Radiobutton(grp_Method,
+			text = "A*",
+			variable = self.rbSelectedValue,
+			value = 4
+		)
 		rb_DFS.grid(column = 1, row = 1, padx = 5)
-		rb_BFS.grid(column = 1, row = 2, padx = 5)
-		rb_Dijkstra.grid(column = 1, row = 3, padx = 5)
+		rb_BFS.grid(column = 2, row = 1, padx = 5)
+		rb_Dijkstra.grid(column = 3, row = 1, padx = 5)
+		rb_Astar.grid(column = 4, row = 1, padx = 5)
 		rb_DFS.select()
 
 		# Button to solve the maze
@@ -107,8 +112,8 @@ class Application(Tkinter.Tk):
 			command = self.btn_solve_on_click
 		)
 		btn_solve.grid(
-			column = 2, row = 1,
-			columnspan = 2,
+			column = 0, row = 2,
+			columnspan = 5,
 			padx = 20, pady = 10
 		)
 
