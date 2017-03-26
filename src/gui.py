@@ -8,6 +8,7 @@ import graph
 import traverser
 import dfs
 import dijkstra
+import astar
 
 
 class Application(Tkinter.Tk):
@@ -160,6 +161,8 @@ class Application(Tkinter.Tk):
 			graph_traverser = bfs.BFS(self.grp)
 		elif self.rbSelectedValue.get() == 3:
 			graph_traverser = dijkstra.Dijkstra(self.grp)
+		elif self.rbSelectedValue.get() == 4:
+			graph_traverser = astar.AStar(self.grp)
 
 		# Traversing the graph and getting traverse node path
 		path, steps = graph_traverser.traverse()
