@@ -39,8 +39,8 @@ class Application(Tkinter.Tk):
 
 		# Main menu
 		menu_MainMenu = Tkinter.Menu(self)
-		menu_MainMenu.add_command(label = "Help", command = sys.exit)	# TODO
-		menu_MainMenu.add_command(label = "About", command = sys.exit)	# TODO
+		menu_MainMenu.add_command(label = "Help", command = self.show_help)
+		menu_MainMenu.add_command(label = "About", command = self.show_about)
 		menu_MainMenu.add_command(label = "Exit", command = sys.exit)
 		self.config(menu = menu_MainMenu)
 
@@ -178,3 +178,28 @@ class Application(Tkinter.Tk):
 		# Writing our image to output file
 		iw.write(self.ent_filename.get())
 		tkMessageBox.showinfo("Info", "Solved the maze in " + str(steps) + " steps!")
+
+
+	# Help window
+	def show_help(self):
+		tkMessageBox.showinfo("Info",
+			"This is a simple program that takes maze input in form of " +
+			"an image and solves it using the algorithm of your choice.\n" +
+			"The program outputs an image with drawn exit path (if the maze is valid).\n" +
+			"Rules for a valid maze:" +
+			"\n    1. Everything that is not white will be interpreted as a wall." +
+			"\n    2. The maze must have one starting point on top, and one exit point in the bottom" +
+			"\n       (if there are multiple entry/exit points, only the first will be used)" +
+			"\n    3. The maze must be surrounded by walls (i.e. must be \"closed\")" +
+			"\n    4. It is advisable for the corridors to be 1px wide, but it is not mandatory" +
+			"\n       (the output will be correct for Dijkstra and A*, but not for DFS or BFS)"
+		)
+
+
+	# About window
+	def show_about(self):
+		tkMessageBox.showinfo("Info",
+			"maze-pathfinder (Beta)\n\n" +
+			"Made by Milana Kovacevic and Ivan Ristovic\n\n" +
+			"More info at: https://ivan-ristovic.github.io/maze-pathfinder/"
+		)
