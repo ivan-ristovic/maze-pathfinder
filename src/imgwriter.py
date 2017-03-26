@@ -22,6 +22,9 @@ class ImageWriter:
 
 	# Applies the path to the pixel_map
 	def apply_path(self, path, pixel_map, map_size):
+
+		self.reset_map(pixel_map, map_size)
+
 		# For every node in path list: color his location and path to next node
 		for i in range(len(path)-1):
 			cur = path[i]
@@ -56,3 +59,11 @@ class ImageWriter:
 					pixel_list.append((255, 0, 0))
 
 		return pixel_list
+
+
+	# Resets the pixel map to delete previous path
+	def reset_map(self, pixel_map, map_size):
+		for x in range(map_size[1]):
+			for y in range(map_size[0]):
+				if pixel_map[x][y] == 2:
+					pixel_map[x][y] = 1
