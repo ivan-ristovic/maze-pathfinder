@@ -1,4 +1,3 @@
-import graph
 import traverser
 from collections import deque
 import heapq
@@ -10,20 +9,30 @@ class AStar(traverser.Traverser):
 		self.initialize()
 		self.path = deque()
 
-		# Determing heuristic: Manhattan distance
-		self.heuristic = {}
-		for node in self.maze.V:
-			self.heuristic[node] = abs(node.x - self.maze.end.x) + abs(node.y - self.maze.end.y)
-
-		self.astar_traverse()
+		heuristic = self.manhattan_heuristic()
+		self.astar_traverse(heuristic)
 
 		return list(self.path), self.steps
 
+	# Determing heuristic: Manhattan distance
+	def manhattan_heuristic(self):
+		h = {}
+		# print "Calculating heutistic... ",
+		for node in self.maze.V:
+			h[node] = abs(node.x - self.maze.end.x) + abs(node.y - self.maze.end.y)
+		# print "Done!"
+		return h
 
-	def astar_traverse(self):
+	def get_heuristic(self, heuristic, node):
+		if heuristic != None:
+			return heuristic[node]
+		else:
+			return 0
+
+	def astar_traverse(self, heuristic):
 		node = self.maze.start
 		# Storing heuristic, weight of the path until the node, the node and its parent
-		weight_heap = [(self.heuristic[node], 0, node, None)]
+		weight_heap = [(self.get_heuristic(heuristic, node), 0, node, None)]
 		visited_nodes = deque()
 		visited_nodes.append([node, None])
 		while weight_heap:
@@ -40,7 +49,7 @@ class AStar(traverser.Traverser):
 				if self.visited[n.x * self.maze.w + n.y] == False:
 					# Distance from min_node to its neighbor
 					new_path = min_path + max(abs(min_node.x - n.x), abs(min_node.y - n.y))
-					new_weight = self.heuristic[min_node] + new_path
+					new_weight = self.get_heuristic(heuristic, min_node) + new_path
 					heapq.heappush(weight_heap, (new_weight, new_path, n, min_node))
 					self.steps += 1
 
