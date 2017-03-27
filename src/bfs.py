@@ -15,10 +15,10 @@ class BFS(traverser.Traverser):
 		parent_map = {}
 		node_queue = deque()
 		node_queue.append(self.maze.start)
-		
+		self.visited[node.x * self.maze.w + node.y] = True
+
 		while node_queue:
 			node = node_queue.popleft()
-			self.visited[node.x * self.maze.w + node.y] = True
 
 			if node == self.maze.end:
 				self.solved = True
