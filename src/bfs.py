@@ -15,7 +15,6 @@ class BFS(traverser.Traverser):
 		parent_map = {}
 		node_queue = deque()
 		node_queue.append(self.maze.start)
-		self.visited[node.x * self.maze.w + node.y] = True
 
 		while node_queue:
 			node = node_queue.popleft()
@@ -25,7 +24,7 @@ class BFS(traverser.Traverser):
 				break
 
 			for n in node.neighbors:
-				if self.visited[n.x * self.maze.w + n.y] == False:
+				if not n in parent_map:
 					node_queue.append(n)
 					parent_map[n] = node
 					self.steps += 1
