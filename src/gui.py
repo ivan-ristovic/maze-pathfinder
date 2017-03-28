@@ -25,9 +25,11 @@ class Application(Tkinter.Tk):
 		# Initializing GUI
 		self.initialize()
 
-		# Variables
+		# Variables for graph and image module
 		self.grp = None
 		self.img = None
+
+		self.exec_time = 0
 
 		self.bind('<Escape>', sys.exit)
 
@@ -156,6 +158,8 @@ class Application(Tkinter.Tk):
 			"Elapsed time: " + str(time.time() - loading_time_start) + "s!"
 		)
 
+		self.exec_time = time.time() - loading_time_start
+
 
 	def btn_solve_on_click(self):
 		if self.grp is None or self.img is None:
@@ -181,15 +185,20 @@ class Application(Tkinter.Tk):
 			return
 
 		# Creating new image writer so we can write our new image to the file
+		imgwrite_time_start = time.time()
 		iw = imgwriter.ImageWriter(self.img.mode, self.img.pixel_map, (self.img.w, self.img.h))
 		# Applying path to image module
 		iw.apply_path(path, self.img.pixel_map, (self.img.w, self.img.h))
+		imgwrite_time_end = time.time()
 
 		# Writing our image to output file
 		iw.write(self.ent_filename.get())
 		tkMessageBox.showinfo("Info",
 			"Solved the maze in " + str(steps) + " steps!\n" +
-			"Elapsed time: " + str(traverse_time_end - traverse_time_start) + "s."
+			"Graph loading time:\t" + str(self.exec_time) + "s\n" +
+			"Graph raverse time:\t" + str(traverse_time_end - traverse_time_start) + "s\n" +
+			"File writing time:\t" + str(imgwrite_time_end - imgwrite_time_start) + "s\n" +
+			"Total execution time:\t" + str(self.exec_time + (imgwrite_time_end - traverse_time_start)) + "s"
 		)
 
 
