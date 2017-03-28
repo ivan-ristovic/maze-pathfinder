@@ -9,7 +9,7 @@ class ImageWriter:
 		self.img = Image.new(mode, size)
 
 		# Transformint map to list and putting list data in our module
-		self.img.putdata(self.map_to_list(pixel_map, size))
+		self.img.putdata(self.map_to_list(pixel_map, size, 255))
 
 
 	# Saves the module to file with a given name
@@ -26,6 +26,7 @@ class ImageWriter:
 		self.reset_map(pixel_map, map_size)
 
 		# For every node in path list: color his location and path to next node
+		colored_fields = 0
 		for i in range(len(path)-1):
 			cur = path[i]
 			nxt = path[i+1]
@@ -35,20 +36,26 @@ class ImageWriter:
 				while start <= end:
 					pixel_map[start][cur.y] = 2
 					start += 1
+					colored_fields += 1
 			else:	# Vertical path
 				start = min(nxt.y, cur.y)
 				end = max(nxt.y, cur.y)
 				while start <= end:
 					pixel_map[cur.x][start] = 2
 					start += 1
+					colored_fields += 1
+			colored_fields -= 1
 
-		self.img.putdata(self.map_to_list(pixel_map, map_size))
+		self.img.putdata(self.map_to_list(pixel_map, map_size, colored_fields))
 
 
 	# Transforms pixel map to pixel list
-	def map_to_list(self, pixel_map, map_size):
+	def map_to_list(self, pixel_map, map_size, colored_fields):
 		# Since we saved the pixels in a matrix, we now need to transform it back to list
 		pixel_list = []
+
+		r = 0
+		step = 255.0 / colored_fields
 		for x in range(map_size[1]):
 			for y in range(map_size[0]):
 				if pixel_map[x][y] == 0:
@@ -56,7 +63,8 @@ class ImageWriter:
 				elif pixel_map[x][y] == 1:
 					pixel_list.append((255, 255, 255))
 				else:
-					pixel_list.append((255, 0, 0))
+					pixel_list.append((int(r), 0, 255-int(r)))
+					r += step
 
 		return pixel_list
 
@@ -65,5 +73,5 @@ class ImageWriter:
 	def reset_map(self, pixel_map, map_size):
 		for x in range(map_size[1]):
 			for y in range(map_size[0]):
-				if pixel_map[x][y] == 2:
+				if pixel_map[x][y] >= 2:
 					pixel_map[x][y] = 1
