@@ -1,6 +1,7 @@
 import Tkinter
 import tkMessageBox
 import sys
+import time
 
 import imgloader
 import imgwriter
@@ -120,12 +121,14 @@ class Application(Tkinter.Tk):
 		)
 
 
+
 	def ent_filename_on_enter(self, event):
 		self.btn_import_on_click()
 
 
 	def btn_import_on_click(self):
 		# Loading image from file
+		loading_time_start = time.time()
 		try:
 			self.img = imgloader.ImageLoader(self.ent_filename.get())
 		except:
@@ -147,7 +150,11 @@ class Application(Tkinter.Tk):
 			)
 			self.grp = None
 			return
-		tkMessageBox.showinfo("Info", "Maze successfully imported!")
+
+		tkMessageBox.showinfo("Info",
+			"Maze successfully imported!\n" +
+			"Elapsed time: " + str(time.time() - loading_time_start) + "s!"
+		)
 
 
 	def btn_solve_on_click(self):
@@ -166,8 +173,10 @@ class Application(Tkinter.Tk):
 			graph_traverser = astar.AStar(self.grp)
 
 		# Traversing the graph and getting traverse node path
+		traverse_time_start = time.time()
 		path, steps = graph_traverser.traverse()
-		if path == []:		# FIXME MILANA
+		traverse_time_end = time.time()
+		if path == []:
 			tkMessageBox.showerror("Error", "Maze not solved!")
 			return
 
@@ -178,7 +187,10 @@ class Application(Tkinter.Tk):
 
 		# Writing our image to output file
 		iw.write(self.ent_filename.get())
-		tkMessageBox.showinfo("Info", "Solved the maze in " + str(steps) + " steps!")
+		tkMessageBox.showinfo("Info",
+			"Solved the maze in " + str(steps) + " steps!\n" +
+			"Elapsed time: " + str(traverse_time_end - traverse_time_start) + "s."
+		)
 
 
 	# Help window
