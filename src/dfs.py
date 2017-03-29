@@ -61,6 +61,8 @@ class DFS(traverser.Traverser):
 
 
 	def dfs_traverse_recursive(self, node):
+
+		# TODO stack smash
 		if node == self.maze.end:
 			self.solved = True
 			return

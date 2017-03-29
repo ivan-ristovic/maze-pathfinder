@@ -82,27 +82,28 @@ class Application(Tkinter.Tk):
 		# Group for traverse method radio buttons
 		grp_Method = Tkinter.LabelFrame(self, text = "Traverse method:", padx = 5, pady = 5)
 		grp_Method.grid(column = 0, row = 1, padx = 10, pady = 5, columnspan = 3)
+
 		# Radio buttons for the traverse method
-		self.rbSelectedValue = Tkinter.IntVar()
+		self.rbSelectedValue = Tkinter.StringVar()
 		rb_DFS = Tkinter.Radiobutton(grp_Method,
 			text = "DFS",
 			variable = self.rbSelectedValue,
-			value = 1
+			value = "DFS"
 		)
 		rb_BFS = Tkinter.Radiobutton(grp_Method,
 			text  =  "BFS",
 			variable = self.rbSelectedValue,
-			value = 2
+			value = "BFS"
 		)
 		rb_Dijkstra = Tkinter.Radiobutton(grp_Method,
 			text = "Dijkstra",
 			variable = self.rbSelectedValue,
-			value = 3
+			value = "Dijkstra"
 		)
 		rb_Astar = Tkinter.Radiobutton(grp_Method,
 			text = "A*",
 			variable = self.rbSelectedValue,
-			value = 4
+			value = "Astar"
 		)
 		rb_DFS.grid(column = 1, row = 1, padx = 5)
 		rb_BFS.grid(column = 2, row = 1, padx = 5)
@@ -121,7 +122,6 @@ class Application(Tkinter.Tk):
 			columnspan = 5,
 			padx = 20, pady = 10
 		)
-
 
 
 	def ent_filename_on_enter(self, event):
@@ -167,13 +167,13 @@ class Application(Tkinter.Tk):
 			return
 
 		# Creating new graph traverser
-		if self.rbSelectedValue.get() == 1:
+		if self.rbSelectedValue.get() == "DFS":
 			graph_traverser = dfs.DFS(self.grp)
-		elif self.rbSelectedValue.get() == 2:
+		elif self.rbSelectedValue.get() == "BFS":
 			graph_traverser = bfs.BFS(self.grp)
-		elif self.rbSelectedValue.get() == 3:
+		elif self.rbSelectedValue.get() == "Dijkstra":
 			graph_traverser = dijkstra.Dijkstra(self.grp)
-		elif self.rbSelectedValue.get() == 4:
+		elif self.rbSelectedValue.get() == "Astar":
 			graph_traverser = astar.AStar(self.grp)
 
 		# Traversing the graph and getting traverse node path
@@ -184,19 +184,20 @@ class Application(Tkinter.Tk):
 			tkMessageBox.showerror("Error", "Maze not solved!")
 			return
 
-		# Creating new image writer so we can write our new image to the file
 		imgwrite_time_start = time.time()
+
+		# Creating new image writer so we can write our new image to the file
 		iw = imgwriter.ImageWriter(self.img.mode, self.img.pixel_map, (self.img.w, self.img.h))
 		# Applying path to image module
 		iw.apply_path(path, self.img.pixel_map, (self.img.w, self.img.h))
-		imgwrite_time_end = time.time()
 
 		# Writing our image to output file
-		iw.write(self.ent_filename.get())
+		iw.write("out_" + self.rbSelectedValue.get() + "_" + self.ent_filename.get())
+		imgwrite_time_end = time.time()
 		tkMessageBox.showinfo("Info",
 			"Solved the maze in " + str(steps) + " steps!\n" +
 			"Graph loading time:\t" + str(self.exec_time) + "s\n" +
-			"Graph raverse time:\t" + str(traverse_time_end - traverse_time_start) + "s\n" +
+			"Graph traverse time:\t" + str(traverse_time_end - traverse_time_start) + "s\n" +
 			"File writing time:\t" + str(imgwrite_time_end - imgwrite_time_start) + "s\n" +
 			"Total execution time:\t" + str(self.exec_time + (imgwrite_time_end - traverse_time_start)) + "s"
 		)
