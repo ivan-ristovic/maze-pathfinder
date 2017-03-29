@@ -1,3 +1,4 @@
+from PIL import Image, ImageTk
 import Tkinter
 import tkMessageBox
 import sys
@@ -192,7 +193,7 @@ class Application(Tkinter.Tk):
 		iw.apply_path(path, self.img.pixel_map, (self.img.w, self.img.h))
 
 		# Writing our image to output file
-		iw.write("out_" + self.rbSelectedValue.get() + "_" + self.ent_filename.get())
+		output_path = iw.write("out_" + self.rbSelectedValue.get() + "_" + self.ent_filename.get())
 		imgwrite_time_end = time.time()
 		tkMessageBox.showinfo("Info",
 			"Solved the maze in " + str(steps) + " steps!\n" +
@@ -201,6 +202,9 @@ class Application(Tkinter.Tk):
 			"File writing time:\t" + str(imgwrite_time_end - imgwrite_time_start) + "s\n" +
 			"Total execution time:\t" + str(self.exec_time + (imgwrite_time_end - traverse_time_start)) + "s"
 		)
+
+		# Showing solution in new window
+		self.create_preview_window((self.img.w, self.img.h), output_path)
 
 
 	# Help window
@@ -226,3 +230,25 @@ class Application(Tkinter.Tk):
 			"Made by Milana Kovacevic and Ivan Ristovic\n\n" +
 			"More info at: https://ivan-ristovic.github.io/maze-pathfinder/"
 		)
+
+
+	# Preview window
+	def create_preview_window(self, size, file_path):
+		# If size is greater than 800x800, then we will not show preview
+		if size > (600, 600):
+			tkMessageBox.showinfo("Info", "Output image too large for preview!")
+			return;
+
+		# Create new window
+		window = Tkinter.Toplevel(self)
+		window.title("Solution: " + file_path)
+		window.geometry(str(size[1]) + "x" + str(size[0]))
+
+		# Opening solution image
+		img = ImageTk.PhotoImage(Image.open(file_path))
+
+		# Using label widget to show image as it's background
+		panel = Tkinter.Label(window, image = img)
+		panel.pack(side = "bottom", fill = "both", expand = "yes")
+
+		window.mainloop()
