@@ -18,6 +18,7 @@ class ImageWriter:
 		mazes_path = os.path.join(parent_dir, "mazes")
 		new_filename = os.path.join(mazes_path, filename)
 		self.img.save(new_filename)
+		return new_filename
 
 
 	# Applies the path to the pixel_map
