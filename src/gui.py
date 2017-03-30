@@ -199,7 +199,7 @@ class Application(Tkinter.Tk):
 		iw.apply_path(path, graph_traverser.path_length, self.img.pixel_map, (self.img.w, self.img.h))
 
 		# Writing our image to output file
-		output_path = iw.write("out_" + self.rbSelectedValue.get() + "_" + self.ent_filename.get())
+		output_path = iw.write(self.ent_filename.get()[:-4] + "_" + self.rbSelectedValue.get() + "_out" + ".bmp")
 		imgwrite_time_end = time.time()
 		tkMessageBox.showinfo("Info",
 			"Solved the maze in " + str(steps) + " steps!\n" +
