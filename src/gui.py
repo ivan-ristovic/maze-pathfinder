@@ -143,6 +143,7 @@ class Application(Tkinter.Tk):
 			return
 
 		# Creating graph
+		graph_time_start = time.time()
 		try:
 			self.grp = graph.Graph(self.img.pixel_map, self.img.h, self.img.w)
 		except:
@@ -153,14 +154,18 @@ class Application(Tkinter.Tk):
 			)
 			self.grp = None
 			return
+		graph_time_end = time.time()
+
+		self.exec_time = graph_time_end - loading_time_start
 
 		tkMessageBox.showinfo("Info",
-			"Maze successfully imported!\n" +
-			"Nodes created: " + str(self.grp.nodes_num) + "\n" +
-			"Elapsed time: " + str(time.time() - loading_time_start) + "s!"
+			"Maze successfully imported!\n\n" +
+			"File loading time:\t\t%.5lfs\n" % (graph_time_start - loading_time_start) +
+			"Graph creation time:\t\t%.5lfs\n" % (graph_time_end - graph_time_start) +
+			"Nodes created:\t\t%u\n" % self.grp.nodes_num +
+			"Elapsed time:\t\t%.5lfs" % self.exec_time
 		)
 
-		self.exec_time = time.time() - loading_time_start
 
 
 	def btn_solve_on_click(self):
@@ -198,11 +203,11 @@ class Application(Tkinter.Tk):
 		imgwrite_time_end = time.time()
 		tkMessageBox.showinfo("Info",
 			"Solved the maze in " + str(steps) + " steps!\n" +
-			"Graph loading time:\t" + str(self.exec_time) + "s\n" +
-			"Graph traverse time:\t" + str(traverse_time_end - traverse_time_start) + "s\n" +
-			"Path length:\t" + str(graph_traverser.path_length) + "\n" +
-			"File writing time:\t" + str(imgwrite_time_end - imgwrite_time_start) + "s\n" +
-			"Total execution time:\t" + str(self.exec_time + (imgwrite_time_end - traverse_time_start)) + "s"
+			"Path length:\t\t%d\n" % graph_traverser.path_length +
+			"Graph loading time:\t\t%.5lfs\n" % self.exec_time +
+			"Graph traverse time:\t\t%.5lfs\n" % (traverse_time_end - traverse_time_start) +
+			"File writing time:\t\t%.5lfs\n" % (imgwrite_time_end - imgwrite_time_start) +
+			"Total execution time:\t\t%.5lfs" % (self.exec_time + (imgwrite_time_end - traverse_time_start))
 		)
 
 		# Showing solution in new window
