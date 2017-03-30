@@ -1,6 +1,7 @@
 # Program output
 src/*.bmp
 mazes/out_*.bmp
+mazes/*_out.bmp
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
