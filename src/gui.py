@@ -2,6 +2,7 @@ from PIL import Image, ImageTk
 import Tkinter
 import tkMessageBox
 import os, sys, time
+import subprocess
 
 import imgloader, imgwriter
 import graph, traverser
@@ -205,7 +206,7 @@ class Application(Tkinter.Tk):
 		)
 
 		# Showing solution in new window
-		if sys.platform == 'linux2':
+		if sys.platform.startswith('linux'):
 			subprocess.call(["xdg-open", output_path])
 		else:
 			os.startfile(output_path)
