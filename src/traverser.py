@@ -8,6 +8,7 @@ class Traverser:
 	# Sets all traverse parameters to their initial values
 	def initialize(self):
 		self.path = []
+		self.path_length = 0
 		self.steps = 0
 		self.solved = False
 		self.visited = [False] * self.maze.w * self.maze.h

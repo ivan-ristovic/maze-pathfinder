@@ -19,7 +19,7 @@ class AStar(traverser.Traverser):
 	def manhattan_heuristic(self):
 		h = {}
 		for node in self.maze.V:
-			h[node] = abs(node.x - self.maze.end.x) + abs(node.y - self.maze.end.y)
+			h[node] = node.diff(self.maze.end)
 		return h
 
 
@@ -51,7 +51,7 @@ class AStar(traverser.Traverser):
 			for n in min_node.neighbors:
 				if self.visited[n.x * self.maze.w + n.y] == False:
 					# Distance from min_node to its neighbor
-					new_path = min_path + max(abs(min_node.x - n.x), abs(min_node.y - n.y))
+					new_path = min_path + min_node.diff(n)
 					new_weight = self.get_heuristic(heuristic, min_node) + new_path
 					heapq.heappush(weight_heap, (new_weight, new_path, n, min_node))
 					self.steps += 1
@@ -64,5 +64,6 @@ class AStar(traverser.Traverser):
 		self.path.append(self.maze.end)
 		current = self.maze.end
 		while parents[current] is not None:
+			self.path_length += current.diff(parents[current])
 			current = parents[current]
 			self.path.append(current)

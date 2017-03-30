@@ -14,7 +14,17 @@ class DFS(traverser.Traverser):
 		if query == "yes":
 			self.dfs_traverse_iterative()
 		else:
+			self.visited[self.maze.start.x * self.maze.w + self.maze.start.y] = True
 			self.dfs_traverse_recursive(self.maze.start)
+
+
+		# Calculating path length
+		# TODO efficient: calculate it in traverse functions
+		if self.solved:
+			current = self.maze.end
+			for node in self.path:
+				self.path_length += node.diff(current)
+				current = node
 
 		return list(self.path), self.steps
 
@@ -67,13 +77,15 @@ class DFS(traverser.Traverser):
 			self.solved = True
 			return
 		else:
-			self.visited[node.x * self.maze.w + node.y] = True
 			for n in node.neighbors:
 				if self.visited[n.x * self.maze.w + n.y] == False:
 					self.steps = self.steps + 1
 					self.path.append(n)
+					self.visited[n.x * self.maze.w + n.y] = True
 					self.dfs_traverse_recursive(n)
 					if not self.solved:
 						self.path.pop()
 					else:
 						return
+
+

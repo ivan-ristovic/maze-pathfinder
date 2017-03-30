@@ -184,7 +184,7 @@ class Application(Tkinter.Tk):
 		traverse_time_end = time.time()
 		if path == []:
 			tkMessageBox.showerror("Error", "Maze not solved!")
-			return
+			return	
 
 		imgwrite_time_start = time.time()
 
@@ -200,6 +200,7 @@ class Application(Tkinter.Tk):
 			"Solved the maze in " + str(steps) + " steps!\n" +
 			"Graph loading time:\t" + str(self.exec_time) + "s\n" +
 			"Graph traverse time:\t" + str(traverse_time_end - traverse_time_start) + "s\n" +
+			"Path length:\t" + str(graph_traverser.path_length) + "\n" +
 			"File writing time:\t" + str(imgwrite_time_end - imgwrite_time_start) + "s\n" +
 			"Total execution time:\t" + str(self.exec_time + (imgwrite_time_end - traverse_time_start)) + "s"
 		)
