@@ -34,19 +34,20 @@ class AStar(traverser.Traverser):
 		node = self.maze.start
 		# Storing heuristic, weight of the path until the node, the node and its parent
 		weight_heap = [(self.get_heuristic(heuristic, node), 0, node, None)]
-		visited_nodes = deque()
-		visited_nodes.append([node, None])
+		parents = {node : None}
 
 		while weight_heap:
 			min_weight, min_path, min_node, min_parent = heapq.heappop(weight_heap)
 			if min_node == self.maze.end:
-				visited_nodes.append([min_node, min_parent])
+				parents[min_node] = min_parent
+				self.solved = True
+				##visited_nodes.append([min_node, min_parent])
 				break;
 			# This node is already marked so I don't need to check it
 			if self.visited[min_node.x * self.maze.w + min_node.y] == True:
 				continue
 			self.visited[min_node.x * self.maze.w + min_node.y] = True
-			visited_nodes.append([min_node, min_parent])
+			parents[min_node] = min_parent
 			for n in min_node.neighbors:
 				if self.visited[n.x * self.maze.w + n.y] == False:
 					# Distance from min_node to its neighbor
@@ -55,12 +56,13 @@ class AStar(traverser.Traverser):
 					heapq.heappush(weight_heap, (new_weight, new_path, n, min_node))
 					self.steps += 1
 
+		# If the maze is not solved, there is no point in reconstruction of the path
+		if self.solved == False:
+			return
+
 		# Reconstruction of the path
-		current, parent = visited_nodes.pop()
-		self.path.append(current)
-		while visited_nodes:
-			node, grand_parent = visited_nodes.pop()
-			if node == parent:
-				self.path.append(node)
-				current = node
-				parent = grand_parent
+		self.path.append(self.maze.end)
+		current = self.maze.end
+		while parents[current] is not None:
+			current = parents[current]
+			self.path.append(current)
