@@ -205,7 +205,10 @@ class Application(Tkinter.Tk):
 		)
 
 		# Showing solution in new window
-		os.startfile(output_path)
+		if sys.platform == 'linux2':
+			subprocess.call(["xdg-open", output_path])
+		else:
+			os.startfile(output_path)
 
 
 	# Help window
