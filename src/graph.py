@@ -16,6 +16,7 @@ class Graph:
 		self.w = w
 		self.h = h
 		self.V = []
+		self.nodes_num = 0
 
 		# Upper buffer is used to determine upper neighbor
 		upper_buffer = [None] * w
@@ -40,6 +41,7 @@ class Graph:
 					if code != 5 and code != 10:
 						# I am a node!
 						new_node = Node(i, j, [])
+						self.nodes_num += 1
 
 						# Determining horizontal neighbors
 						if left_neighbor is not None:

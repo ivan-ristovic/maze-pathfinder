@@ -156,6 +156,7 @@ class Application(Tkinter.Tk):
 
 		tkMessageBox.showinfo("Info",
 			"Maze successfully imported!\n" +
+			"Nodes created: " + str(self.grp.nodes_num) + "\n" +
 			"Elapsed time: " + str(time.time() - loading_time_start) + "s!"
 		)
 
