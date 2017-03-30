@@ -234,7 +234,7 @@ class Application(Tkinter.Tk):
 
 	# Preview window
 	def create_preview_window(self, size, file_path):
-		# If size is greater than 800x800, then we will not show preview
+		# If size is greater than 600x600, then we will not show preview
 		if size > (600, 600):
 			tkMessageBox.showinfo("Info", "Output image too large for preview!")
 			return;
