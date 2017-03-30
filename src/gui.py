@@ -1,17 +1,11 @@
 from PIL import Image, ImageTk
 import Tkinter
 import tkMessageBox
-import sys
-import time
+import os, sys, time
 
-import imgloader
-import imgwriter
-import graph
-import traverser
-import dfs
-import bfs
-import dijkstra
-import astar
+import imgloader, imgwriter
+import graph, traverser
+import dfs, bfs, dijkstra, astar
 
 
 class Application(Tkinter.Tk):
@@ -211,7 +205,7 @@ class Application(Tkinter.Tk):
 		)
 
 		# Showing solution in new window
-		self.create_preview_window((self.img.w, self.img.h), output_path)
+		os.startfile(output_path)
 
 
 	# Help window
@@ -237,25 +231,3 @@ class Application(Tkinter.Tk):
 			"Made by Milana Kovacevic and Ivan Ristovic\n\n" +
 			"More info at: https://ivan-ristovic.github.io/maze-pathfinder/"
 		)
-
-
-	# Preview window
-	def create_preview_window(self, size, file_path):
-		# If size is greater than 600x600, then we will not show preview
-		if size > (600, 600):
-			tkMessageBox.showinfo("Info", "Output image too large for preview!")
-			return;
-
-		# Create new window
-		window = Tkinter.Toplevel(self)
-		window.title("Solution: " + file_path)
-		window.geometry(str(size[1]) + "x" + str(size[0]))
-
-		# Opening solution image
-		img = ImageTk.PhotoImage(Image.open(file_path))
-
-		# Using label widget to show image as it's background
-		panel = Tkinter.Label(window, image = img)
-		panel.pack(side = "bottom", fill = "both", expand = "yes")
-
-		window.mainloop()
