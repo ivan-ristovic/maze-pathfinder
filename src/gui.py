@@ -184,14 +184,14 @@ class Application(Tkinter.Tk):
 		traverse_time_end = time.time()
 		if path == []:
 			tkMessageBox.showerror("Error", "Maze not solved!")
-			return	
+			return
 
 		imgwrite_time_start = time.time()
 
 		# Creating new image writer so we can write our new image to the file
 		iw = imgwriter.ImageWriter(self.img.mode, self.img.pixel_map, (self.img.w, self.img.h))
 		# Applying path to image module
-		iw.apply_path(path, self.img.pixel_map, (self.img.w, self.img.h))
+		iw.apply_path(path, graph_traverser.path_length, self.img.pixel_map, (self.img.w, self.img.h))
 
 		# Writing our image to output file
 		output_path = iw.write("out_" + self.rbSelectedValue.get() + "_" + self.ent_filename.get())

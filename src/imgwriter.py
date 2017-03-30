@@ -22,38 +22,14 @@ class ImageWriter:
 
 
 	# Applies the path to the pixel_map
-	def apply_path(self, path, pixel_map, map_size):
-
+	def apply_path(self, path, path_length, pixel_map, map_size):
 		self.reset_map(pixel_map, map_size)
 
 		# For every node in path list: color his location and path to next node
-
-		path_len = len(path)
-
-		it = 0
-		for i in range(path_len-1):
-			cur = path[i]
-			nxt = path[i+1]
-
-			if nxt.x != cur.x:	# Horizontal path
-				start = min(nxt.x, cur.x)
-				end = max(nxt.x, cur.x)
-				while start <= end:
-					pixel_map[start][cur.y] = 2
-					start += 1
-					it += 1
-			else:	# Vertical path
-				start = min(nxt.y, cur.y)
-				end = max(nxt.y, cur.y)
-				while start <= end:
-					pixel_map[cur.x][start] = 2
-					start += 1
-					it += 1
-		it -= 1
-
-		step = 255.0 / it
+		nodes_in_path = len(path)
+		step = 255.0 / path_length
 		r = 2.0
-		for i in range(path_len-1):
+		for i in range(nodes_in_path-1):
 			cur = path[i]
 			nxt = path[i+1]
 

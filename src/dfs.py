@@ -20,12 +20,14 @@ class DFS(traverser.Traverser):
 
 		# Calculating path length
 		# TODO efficient: calculate it in traverse functions
+		# FIXME path_len is calculating wrong? (MAYBE)
 		if self.solved:
-			current = self.maze.end
+			current = self.maze.start
 			for node in self.path:
-				self.path_length += node.diff(current)
+				# node.show()
+				# print node.diff(current)
+				self.path_length += node.diff(current) + 1
 				current = node
-
 		return list(self.path), self.steps
 
 

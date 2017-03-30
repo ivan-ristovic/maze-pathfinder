@@ -3,7 +3,6 @@ class Node:
 		self.x = x
 		self.y = y
 		self.neighbors = []
-		self.visited = False
 
 	def show(self):
 		print "(" + str(self.x) + ", " + str(self.y) + ")"

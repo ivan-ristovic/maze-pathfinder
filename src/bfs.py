@@ -35,7 +35,7 @@ class BFS(traverser.Traverser):
 			self.path.append(self.maze.end)
 			node = self.maze.end
 			while node != self.maze.start:
-				self.path_length += node.diff(parent_map[node])
+				self.path_length += node.diff(parent_map[node]) + 1
 				node = parent_map[node]
 				self.path.appendleft(node)
 		else:

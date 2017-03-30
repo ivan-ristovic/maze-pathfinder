@@ -64,6 +64,6 @@ class AStar(traverser.Traverser):
 		self.path.append(self.maze.end)
 		current = self.maze.end
 		while parents[current] is not None:
-			self.path_length += current.diff(parents[current])
+			self.path_length += current.diff(parents[current]) + 1
 			current = parents[current]
 			self.path.append(current)
