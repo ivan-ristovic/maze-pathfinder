@@ -203,7 +203,10 @@ class Application(Tkinter.Tk):
 
 		# Traversing the graph and getting traverse node path
 		traverse_time_start = time.time()
-		path, steps = graph_traverser.traverse()
+		try:
+			path, steps = graph_traverser.traverse()
+		except:
+			tkMessageBox.showerror("Error", "Unknown error!")
 		traverse_time_end = time.time()
 		if path == []:
 			tkMessageBox.showerror("Error", "Maze not solved!")
