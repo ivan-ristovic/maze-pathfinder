@@ -1,6 +1,6 @@
 from PIL import Image, ImageTk
 import Tkinter
-import tkMessageBox
+import tkMessageBox, tkFileDialog
 import os, sys, time
 import subprocess
 
@@ -67,7 +67,7 @@ class Application(Tkinter.Tk):
 
 		# Button to load image from file
 		btn_import = Tkinter.Button(self,
-			text = "Import maze!",
+			text = "Import",
 			command = self.btn_import_on_click
 		)
 		btn_import.grid(
@@ -75,9 +75,19 @@ class Application(Tkinter.Tk):
 			padx = 5, pady = 5
 		)
 
+		# Browse button
+		btn_import = Tkinter.Button(self,
+			text = "Browse",
+			command = self.open_dialog
+		)
+		btn_import.grid(
+			column = 3, row = 0,
+			padx = 5, pady = 5
+		)
+
 		# Group for traverse method radio buttons
 		grp_Method = Tkinter.LabelFrame(self, text = "Traverse method:", padx = 5, pady = 5)
-		grp_Method.grid(column = 0, row = 1, padx = 10, pady = 5, columnspan = 3)
+		grp_Method.grid(column = 0, row = 1, padx = 10, pady = 5, columnspan = 4)
 
 		# Radio buttons for the traverse method
 		self.rbSelectedValue = Tkinter.StringVar()
@@ -124,11 +134,24 @@ class Application(Tkinter.Tk):
 		self.btn_import_on_click()
 
 
+	def open_dialog(self):
+		self.filename = tkFileDialog.askopenfilename(
+			filetypes = ( ("Picture files", "*.bmp"), ("All files", "*.*") )
+		)
+		if self.filename:
+			parent_dir, curr_dir = os.path.split(os.getcwd())
+			os.chdir(os.path.join(parent_dir, "mazes"))
+			self.ent_filename.delete(0, Tkinter.END)
+			self.ent_filename.insert(0, os.path.relpath(self.filename))
+			os.chdir(os.path.join(parent_dir, "src"))
+
+
 	def btn_import_on_click(self):
 		# Loading image from file
 		loading_time_start = time.time()
 		try:
-			self.img = imgloader.ImageLoader(self.ent_filename.get())
+			self.filename = self.ent_filename.get()
+			self.img = imgloader.ImageLoader(self.filename)
 		except:
 			tkMessageBox.showerror("Error",
 				"File not found!\n" +
@@ -194,7 +217,7 @@ class Application(Tkinter.Tk):
 		iw.apply_path(path, graph_traverser.path_length, self.img.pixel_map, (self.img.w, self.img.h))
 
 		# Writing our image to output file
-		output_path = iw.write(self.ent_filename.get()[:-4] + "_" + self.rbSelectedValue.get() + "_out" + ".bmp")
+		output_path = iw.write(self.filename[:-4] + "_" + self.rbSelectedValue.get() + "_out" + ".bmp")
 		imgwrite_time_end = time.time()
 		tkMessageBox.showinfo("Info",
 			"Solved the maze in " + str(steps) + " steps!\n" +
