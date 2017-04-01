@@ -1,4 +1,4 @@
-from PIL import Image, ImageTk
+from PIL import Image
 import Tkinter
 import tkMessageBox, tkFileDialog
 import os, sys, time
@@ -221,7 +221,9 @@ class Application(Tkinter.Tk):
 
 		# Writing our image to output file
 		output_path = iw.write(self.filename[:-4] + "_" + self.rbSelectedValue.get() + "_out" + ".bmp")
+
 		imgwrite_time_end = time.time()
+
 		tkMessageBox.showinfo("Info",
 			"Solved the maze in " + str(steps) + " steps!\n" +
 			"Path length:\t\t%d\n" % graph_traverser.path_length +
