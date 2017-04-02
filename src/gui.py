@@ -126,8 +126,21 @@ class Application(Tkinter.Tk):
 		btn_solve.grid(
 			column = 0, row = 2,
 			columnspan = 5,
-			padx = 20, pady = 10
+			padx = 20, pady = 5
 		)
+
+		# Open solution checkbox
+		self.show_solution = Tkinter.IntVar()
+		cb_show_solution = Tkinter.Checkbutton(self,
+			text = "Open solution when finished",
+			variable = self.show_solution
+		)
+		cb_show_solution.grid(
+			column = 0, row = 3,
+			columnspan = 5,
+			padx = 20, pady = 0
+		)
+		cb_show_solution.select()
 
 
 	def ent_filename_on_enter(self, event):
@@ -233,11 +246,12 @@ class Application(Tkinter.Tk):
 			"Total execution time:\t\t%.5lfs" % (self.exec_time + (imgwrite_time_end - traverse_time_start))
 		)
 
-		# Showing solution in new window
-		if sys.platform.startswith('linux'):
-			subprocess.call(["xdg-open", output_path])
-		else:
-			os.startfile(output_path)
+		if self.show_solution.get() == 1:
+			# Showing solution in new window
+			if sys.platform.startswith('linux'):
+				subprocess.call(["xdg-open", output_path])
+			else:
+				os.startfile(output_path)
 
 
 	# Help window
