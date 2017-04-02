@@ -19,7 +19,10 @@ Download the project, navigate to the **/src** folder and run main.py
 ```
 $ python main.py
 ```
-:exclamation: **Note:** For the program to work, you must have the **PIL** and **Tkinter** libraries installed.
+:exclamation: **Note:** Requirements:
+- Python 2.7 (although it should work for 2.5 and above, but not tested)
+- Windows or Linux OS (MacOS is not supported)
+- For the program to work, you must have the **PIL** and **Tkinter** libraries installed.
 Additional information for PIL library can be found **[here](http://www.pythonware.com/products/pil/)**.
 **Tkinter** should already be supported natively.
 
