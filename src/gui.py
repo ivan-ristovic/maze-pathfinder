@@ -7,6 +7,7 @@ import subprocess
 import imgloader, imgwriter
 import graph, traverser
 import dfs, bfs, dijkstra, astar
+import generator
 
 
 class Application(Tkinter.Tk):
@@ -14,19 +15,24 @@ class Application(Tkinter.Tk):
 	# Constructor
 	def __init__(self, parent):
 
+		# Our form is in shrink form from start
+		self.expanded = False
+
 		# Calling Tk Constructor since our class is derived from Tkinter.Tk
 		Tkinter.Tk.__init__(self, parent)
 		# Saving a reference to parent
 		self.parent = parent
-		# Initializing GUI
+		# Initializing GUI widgets
 		self.initialize()
 
 		# Variables for graph and image module
 		self.grp = None
 		self.img = None
 
+		# Execution time
 		self.exec_time = 0
 
+		# Esc to close the program
 		self.bind('<Escape>', sys.exit)
 
 
@@ -44,8 +50,12 @@ class Application(Tkinter.Tk):
 		menu_MainMenu.add_command(label = "Exit", command = sys.exit)
 		self.config(menu = menu_MainMenu)
 
+		# Main group
+		self.grp_solver = Tkinter.LabelFrame(self, text = "Maze solver", padx = 5, pady = 5)
+		self.grp_solver.grid(column = 0, row = 0, padx = 10, pady = 5, columnspan = 5)
+
 		# Filename label
-		lbl_filename = Tkinter.Label(self,
+		lbl_filename = Tkinter.Label(self.grp_solver,
 			anchor = "w",
 			text = "Filename: "
 		)
@@ -56,7 +66,7 @@ class Application(Tkinter.Tk):
 		)
 
 		# Entry for filename
-		self.ent_filename = Tkinter.Entry(self)
+		self.ent_filename = Tkinter.Entry(self.grp_solver)
 		self.ent_filename.grid(
 			column = 1, row = 0,
 			sticky = "ew",
@@ -66,7 +76,7 @@ class Application(Tkinter.Tk):
 		self.ent_filename.bind("<Return>", self.ent_filename_on_enter)
 
 		# Button to load image from file
-		btn_import = Tkinter.Button(self,
+		btn_import = Tkinter.Button(self.grp_solver,
 			text = "Import",
 			command = self.btn_import_on_click
 		)
@@ -76,7 +86,7 @@ class Application(Tkinter.Tk):
 		)
 
 		# Browse button
-		btn_import = Tkinter.Button(self,
+		btn_import = Tkinter.Button(self.grp_solver,
 			text = "Browse",
 			command = self.open_dialog
 		)
@@ -86,27 +96,27 @@ class Application(Tkinter.Tk):
 		)
 
 		# Group for traverse method radio buttons
-		grp_Method = Tkinter.LabelFrame(self, text = "Traverse method:", padx = 5, pady = 5)
-		grp_Method.grid(column = 0, row = 1, padx = 10, pady = 5, columnspan = 4)
+		grp_method = Tkinter.LabelFrame(self.grp_solver, text = "Traverse method:", padx = 5, pady = 5)
+		grp_method.grid(column = 0, row = 1, padx = 10, pady = 5, columnspan = 4)
 
 		# Radio buttons for the traverse method
 		self.rbSelectedValue = Tkinter.StringVar()
-		rb_DFS = Tkinter.Radiobutton(grp_Method,
+		rb_DFS = Tkinter.Radiobutton(grp_method,
 			text = "DFS",
 			variable = self.rbSelectedValue,
 			value = "DFS"
 		)
-		rb_BFS = Tkinter.Radiobutton(grp_Method,
+		rb_BFS = Tkinter.Radiobutton(grp_method,
 			text  =  "BFS",
 			variable = self.rbSelectedValue,
 			value = "BFS"
 		)
-		rb_Dijkstra = Tkinter.Radiobutton(grp_Method,
+		rb_Dijkstra = Tkinter.Radiobutton(grp_method,
 			text = "Dijkstra",
 			variable = self.rbSelectedValue,
 			value = "Dijkstra"
 		)
-		rb_Astar = Tkinter.Radiobutton(grp_Method,
+		rb_Astar = Tkinter.Radiobutton(grp_method,
 			text = "A*",
 			variable = self.rbSelectedValue,
 			value = "Astar"
@@ -118,7 +128,7 @@ class Application(Tkinter.Tk):
 		rb_DFS.select()
 
 		# Button to solve the maze
-		btn_solve = Tkinter.Button(self,
+		btn_solve = Tkinter.Button(self.grp_solver,
 			text = "Solve maze!",
 			width = 30,
 			command = self.btn_solve_on_click
@@ -131,16 +141,86 @@ class Application(Tkinter.Tk):
 
 		# Open solution checkbox
 		self.show_solution = Tkinter.IntVar()
-		cb_show_solution = Tkinter.Checkbutton(self,
+		cb_show_solution = Tkinter.Checkbutton(self.grp_solver,
 			text = "Open solution when finished",
 			variable = self.show_solution
 		)
 		cb_show_solution.grid(
 			column = 0, row = 3,
 			columnspan = 5,
-			padx = 20, pady = 0
+			padx = 20, pady = 5
 		)
 		cb_show_solution.select()
+
+		# Expand button
+		self.btn_expand = Tkinter.Button(self,
+			text = "v",
+			width = 50, height = 1,
+			command = self.toggle_expand
+		)
+		self.btn_expand.grid(
+			column = 0, row = 5,
+			columnspan = 5,
+			padx = 0, pady = 0
+		)
+
+
+	def toggle_expand(self):
+		self.expanded = not self.expanded
+		if self.expanded:
+			self.btn_expand.config(text = "^")
+			# Creating all additional widgets:
+			# Group
+			self.grp_maze_gen = Tkinter.LabelFrame(self, text = "Maze generator", padx = 5, pady = 5)
+			self.grp_maze_gen.grid(column = 0, row = 6, padx = 10, pady = 5, columnspan = 6)
+			# Size label
+			self.lbl_maze_size = Tkinter.Label(self,
+				anchor = "w",
+				text = "Maze size: "
+			)
+			self.lbl_maze_size.grid(
+				column = 0, row = 6,
+				sticky = "ew",
+				padx = 20, pady = 5
+			)
+			# Size slider
+			self.sld_mazegen_size = Tkinter.Scale(self.grp_maze_gen,
+				from_ = 10, to = 70,
+				width = 40, length = 150,
+				orient = Tkinter.HORIZONTAL
+			)
+			self.sld_mazegen_size.grid(
+				column = 1, row = 6,
+				columnspan = 6,
+				padx = 0, pady = 0
+			)
+			# Maze generate button
+			self.btn_mazegen = Tkinter.Button(self.grp_maze_gen,
+				text = "Generate maze!",
+				width = 30,
+				command = self.generate_maze
+			)
+			self.btn_mazegen.grid(
+				column = 0, row = 7,
+				columnspan = 5,
+				padx = 50, pady = 10
+			)
+
+		else:
+			self.btn_expand.config(text = "v")
+			# Destroying all widgets
+			self.grp_maze_gen.destroy()
+			self.lbl_maze_size.destroy()
+			self.sld_mazegen_size.destroy()
+			self.btn_mazegen.destroy()
+
+
+	def generate_maze(self):
+		try:
+			mg = generator.MazeGenerator(50, 50)
+			mg.create_maze("output.bmp")
+		except:
+			tkMessageBox.showerror("Error", "Maze generator failed!")
 
 
 	def ent_filename_on_enter(self, event):
