@@ -7,6 +7,7 @@ import subprocess
 import imgloader, imgwriter
 import graph, traverser
 import dfs, bfs, dijkstra, astar
+import generator
 
 
 class Application(Tkinter.Tk):
@@ -14,19 +15,24 @@ class Application(Tkinter.Tk):
 	# Constructor
 	def __init__(self, parent):
 
+		# Our form is in shrink form from start
+		self.expanded = False
+
 		# Calling Tk Constructor since our class is derived from Tkinter.Tk
 		Tkinter.Tk.__init__(self, parent)
 		# Saving a reference to parent
 		self.parent = parent
-		# Initializing GUI
+		# Initializing GUI widgets
 		self.initialize()
 
 		# Variables for graph and image module
 		self.grp = None
 		self.img = None
 
+		# Execution time
 		self.exec_time = 0
 
+		# Esc to close the program
 		self.bind('<Escape>', sys.exit)
 
 
@@ -141,6 +147,45 @@ class Application(Tkinter.Tk):
 			padx = 20, pady = 0
 		)
 		cb_show_solution.select()
+
+		# Expand button
+		self.btn_expand = Tkinter.Button(self,
+			text = "v",
+			width = 50, height = 1,
+			command = self.toggle_expand
+		)
+		self.btn_expand.grid(
+			column = 0, row = 5,
+			columnspan = 5,
+			padx = 0, pady = 0
+		)
+
+
+	def toggle_expand(self):
+		self.expanded = not self.expanded
+		if self.expanded:
+			# Creating all additional widgets
+			self.btn_expand.config(text = "^")
+			self.btn_mazegen = Tkinter.Button(self,
+				text = "Generate maze!",
+				width = 30,
+				command = self.generate_maze
+			)
+			self.btn_mazegen.grid(
+				column = 0, row = 6,
+				columnspan = 5,
+				padx = 10, pady = 10
+
+			)
+		else:
+			# Destroying all widgets
+			self.btn_expand.config(text = "v")
+			self.btn_mazegen.destroy()
+
+
+	def generate_maze(self):
+		mg = generator.MazeGenerator(50, 50)
+		mg.create_maze("output.bmp")
 
 
 	def ent_filename_on_enter(self, event):
