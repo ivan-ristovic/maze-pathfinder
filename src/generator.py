@@ -1,96 +1,70 @@
 from PIL import Image
-import random
+from random import shuffle, randrange
 
 class MazeGenerator:
 
 	# Constructor
-	def __init__(self, size):
-		self.pixel_map = [[0 for x in range(size)] for y in range(size)]
-
-		for i in range(size):
-			self.pixel_map[0][i] = self.pixel_map[size-1][i] = 1
-			self.pixel_map[i][0] = self.pixel_map[i][size-1] = 1
+	def __init__(self, w, h):
+		self.w = w
+		self.h = h
 
 
-		self.result = self.create_random_maze(1, 1, size-1, size-1);
-		self.print_map()
+	def create_maze(self, filename):
+		w = self.w / 2
+		h = self.h / 2
 
+		# Visited list
+		vis = [[0] * w + [1] for _ in range(h)] + [[1] * (w + 1)]
 
-	def create_random_maze(self, start_x, start_y, w, h):
-		if w <= 3 or h <= 3:
-			return
+		# Horizontal and vertical components, zip to view maze
+		ver = [["10"] * w + ['1'] for _ in range(h)] + [[]]
+		hor = [["11"] * w + ['1'] for _ in range(h + 1)]
 
-		orientation = self.choose_orientation(w, h)
+		# DFS walk function
+		def walk(x, y):
+			vis[y][x] = 1
 
-		# Determining wall starting point (wx), passage point (px) and wall length
-		if orientation == 1:	# horizontal
-			wx = start_x
-			wy = start_y + random.randint(0, h-3)
-			px = wx + random.randint(1, w-2)
-			py = wy
-			wall_len = w
-			dx = 1
-			dy = 0
-		else:	# vertical
-			wx = start_x + random.randint(0, w-3)
-			wy = start_y
-			px = wx
-			py = wy + random.randint(1, h-2)
-			wall_len = h
-			dx = 0
-			dy = 1
+			neighbors = [(x - 1, y), (x, y + 1), (x + 1, y), (x, y - 1)]
+			shuffle(neighbors)
+			for (xx, yy) in neighbors:
+				if vis[yy][xx]: continue
+				if xx == x: hor[max(y, yy)][x] = "10"
+				if yy == y: ver[y][max(x, xx)] = "00"
+				walk(xx, yy)
 
-		print "start:", start_x, start_y , "w:", w, "h:", h
-		print "wx:", wx, "wy:", wy, "px:", px, "py:", py, "len:", wall_len
+		# Starting walk
+		walk(randrange(w), randrange(h))
 
-		# Drawing wall
-		for i in range(0, wall_len):
-			if wx != px or wy != py:
-				self.pixel_map[wy][wx] = 1
-			wx += dx
-			wy += dy
+		# Solution string
+		s = ""
+		for (a, b) in zip(hor, ver):
+			s += ''.join(a + b)
 
-		self.print_map()
-		c = raw_input()
+		# String -> List (for PIL) and print to file
+		def print_output(filename):
+			# String -> List
+			pixel_list = []
+			for c in s:
+				if c == '0':
+					pixel_list.append((255, 255, 255))
+				else:
+					pixel_list.append(0)
 
-		# Determining parameters for the next recursive call
-		if orientation == 1:
-			new_w = w
-			new_h = wy - start_y + 1
-		else:
-			new_w = wx - start_x + 1
-			new_h = h
-		self.create_random_maze(start_x, start_y, new_w, new_h)
+			# Creating starting point
+			for i in range(1, self.w):
+				if pixel_list[i] == 0 and pixel_list[i + self.w] == (255, 255, 255):
+					pixel_list[i] = (255, 255, 255)
+					break
+			# Creating exit point
+			for i in range(len(pixel_list) - 2, len(pixel_list) - self.w, -1):
+				if pixel_list[i] == 0 and pixel_list[i - self.w] == (255, 255, 255):
+					pixel_list[i] = (255, 255, 255)
+					break
 
-		if orientation == 1:
-			new_start_x = start_x
-			new_start_y = wy + 1
-			new_w = w
-			new_h = start_y + h - wy - 1
-		else:
-			new_start_x = wx + 1
-			new_start_y = start_y
-			new_w = start_x + w - wx - 1
-			new_h = h
-		self.create_random_maze(new_start_x, new_start_y, new_w, new_h)
+			# Writing image to file
+			img = Image.new("RGB", (self.w + 1, self.h + 1))
+			img.putdata(pixel_list)
+			img.save(filename)
 
-
-
-	# Returns horizontal or vertical, depending on
-	def choose_orientation(self, w, h):
-		if w < h:	# horizontal
-			return 1
-		elif w > h:	# vertical
-			return 0
-		else:
-			return random.randint(0, 1)
-
-
-	def print_map(self):
-		for r in self.pixel_map:
-			for c in r:
-				print c,
-			print
-
-
-mg = MazeGenerator(15)
+		# Printing output
+		print_output(filename)
