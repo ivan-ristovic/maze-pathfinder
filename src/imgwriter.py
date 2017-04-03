@@ -8,9 +8,6 @@ class ImageWriter:
 		# Creating new image module with given parameters
 		self.img = Image.new(mode, size)
 
-		# Transformint map to list and putting list data in our module
-		self.img.putdata(self.map_to_list(pixel_map, size))
-
 
 	# Saves the module to file with a given name
 	def write(self, filename):
@@ -47,8 +44,6 @@ class ImageWriter:
 					pixel_map[cur.x][start] = r
 					start += 1
 					r += step
-
-		self.img.putdata(self.map_to_list(pixel_map, map_size))
 
 
 	# Transforms pixel map to pixel list
