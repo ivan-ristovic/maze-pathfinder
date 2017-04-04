@@ -242,11 +242,14 @@ class Application(Tkinter.Tk):
 			filetypes = ( ("Picture files", "*.bmp"), ("All files", "*.*") )
 		)
 		if self.filename:
-			parent_dir, curr_dir = os.path.split(os.getcwd())
-			os.chdir(os.path.join(parent_dir, "mazes"))
-			self.ent_filename.delete(0, Tkinter.END)
-			self.ent_filename.insert(0, os.path.relpath(self.filename))
-			os.chdir(os.path.join(parent_dir, "src"))
+			try:
+				parent_dir, curr_dir = os.path.split(os.getcwd())
+				os.chdir(os.path.join(parent_dir, "mazes"))
+				self.ent_filename.delete(0, Tkinter.END)
+				self.ent_filename.insert(0, os.path.relpath(self.filename))
+				os.chdir(os.path.join(parent_dir, "src"))
+			except ValueError:
+				tkMessageBox.showerror("Error", "Cannot open that file!")
 
 
 	def btn_import_on_click(self):
@@ -306,10 +309,10 @@ class Application(Tkinter.Tk):
 
 		# Traversing the graph and getting traverse node path
 		traverse_time_start = time.time()
-		try:
-			path, steps = graph_traverser.traverse()
-		except:
-			tkMessageBox.showerror("Error", "Unknown error!")
+		# try:
+		path, steps = graph_traverser.traverse()
+		# except:
+		# 	tkMessageBox.showerror("Error", "Unknown error!")
 		traverse_time_end = time.time()
 		if path == []:
 			tkMessageBox.showerror("Error", "Maze not solved!")
