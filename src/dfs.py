@@ -9,13 +9,13 @@ class DFS(traverser.Traverser):
 		self.initialize()
 		self.path = deque()
 		self.path.append(self.maze.start)
-
 		query = tkMessageBox.askquestion("DFS", "Prefer iterative over recursive?")
 		if query == "yes":
 			self.dfs_traverse_iterative()
 		else:
-			self.visited[self.maze.start.x * self.maze.w + self.maze.start.y] = True
+			self.parent_map[self.maze.start] = None
 			self.dfs_traverse_recursive(self.maze.start)
+
 
 
 		# Calculating path length
@@ -34,7 +34,7 @@ class DFS(traverser.Traverser):
 	def dfs_traverse_iterative(self):
 		# Setting start node
 		node = self.maze.start
-		self.visited[node.x * self.maze.w + node.y] = True
+		self.parent_map = {node : None}
 
 		while (self.path):
 			# Take a look at top of the stack (DEQUE Y U NO IMPLEMENT POP?)
@@ -48,10 +48,10 @@ class DFS(traverser.Traverser):
 			has_nonvisited_neighbors = False
 			for n in node.neighbors:
 				# If we find one that isn't visited
-				if self.visited[n.x * self.maze.w + n.y] == False:
+				if n not in self.parent_map:
 					# Put it on top of the stack and mark it as visited
 					has_nonvisited_neighbors = True
-					self.visited[n.x * self.maze.w + n.y] = True
+					self.parent_map[n] = node
 					self.path.append(n)
 					self.steps += 1
 					break
@@ -80,10 +80,10 @@ class DFS(traverser.Traverser):
 			return
 		else:
 			for n in node.neighbors:
-				if self.visited[n.x * self.maze.w + n.y] == False:
+				if n not in self.parent_map:
 					self.steps = self.steps + 1
 					self.path.append(n)
-					self.visited[n.x * self.maze.w + n.y] = True
+					self.parent_map[n] = node
 					self.dfs_traverse_recursive(n)
 					if not self.solved:
 						self.path.pop()

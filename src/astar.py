@@ -34,22 +34,24 @@ class AStar(traverser.Traverser):
 		node = self.maze.start
 		# Storing heuristic, weight of the path until the node, the node and its parent
 		weight_heap = [(self.get_heuristic(heuristic, node), 0, node, None)]
-		parents = {node : None}
+		self.parent_map = {node : None}
+		# Closed list is a map of nodes that are finished processing
+		closed_list = {}
 
 		while weight_heap:
 			min_weight, min_path, min_node, min_parent = heapq.heappop(weight_heap)
 			if min_node == self.maze.end:
-				parents[min_node] = min_parent
+				self.parent_map[min_node] = min_parent
 				self.solved = True
-				##visited_nodes.append([min_node, min_parent])
 				break;
-			# This node is already marked so I don't need to check it
-			if self.visited[min_node.x * self.maze.w + min_node.y] == True:
+			# This node is already in the closed so I don't need to check it
+			# There's no need to do the algorithm for this node because the heuristic is admissive
+			if min_node in closed_list:
 				continue
-			self.visited[min_node.x * self.maze.w + min_node.y] = True
-			parents[min_node] = min_parent
+			closed_list[min_node] = True
+			self.parent_map[min_node] = min_parent
 			for n in min_node.neighbors:
-				if self.visited[n.x * self.maze.w + n.y] == False:
+				if n not in closed_list:
 					# Distance from min_node to its neighbor
 					new_path = min_path + min_node.diff(n)
 					new_weight = self.get_heuristic(heuristic, min_node) + new_path
@@ -61,9 +63,10 @@ class AStar(traverser.Traverser):
 			return
 
 		# Reconstruction of the path
+		# FIXME different path length for Dijkstra and Astar for 400.bmp: weeeiiiird???
 		self.path.append(self.maze.end)
 		current = self.maze.end
-		while parents[current] is not None:
-			self.path_length += current.diff(parents[current]) + 1
-			current = parents[current]
+		while self.parent_map[current] is not None:
+			self.path_length += current.diff(self.parent_map[current]) + 1
+			current = self.parent_map[current]
 			self.path.append(current)
