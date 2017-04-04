@@ -54,7 +54,7 @@ class ImageWriter:
 		for x in range(map_size[1]):
 			for y in range(map_size[0]):
 				if pixel_map[x][y] == 0:
-					pixel_list.append((0, 0, 0))
+					pixel_list.append(0)
 				elif pixel_map[x][y] == 1:
 					pixel_list.append((255, 255, 255))
 				else:

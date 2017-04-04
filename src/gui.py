@@ -176,21 +176,22 @@ class Application(Tkinter.Tk):
 			# Size label
 			self.lbl_maze_size = Tkinter.Label(self,
 				anchor = "w",
-				text = "Maze size: "
+				text = "Maze size: ",
+				width = 1
 			)
 			self.lbl_maze_size.grid(
-				column = 0, row = 6,
+				column = 1, row = 6,
 				sticky = "ew",
-				padx = 20, pady = 5
+				padx = 10, pady = 5
 			)
 			# Size slider
 			self.sld_mazegen_size = Tkinter.Scale(self.grp_maze_gen,
 				from_ = 10, to = 70,
-				width = 40, length = 150,
+				width = 40, length = 170,
 				orient = Tkinter.HORIZONTAL
 			)
 			self.sld_mazegen_size.grid(
-				column = 1, row = 6,
+				column = 2, row = 6,
 				columnspan = 6,
 				padx = 0, pady = 0
 			)
@@ -216,11 +217,16 @@ class Application(Tkinter.Tk):
 
 
 	def generate_maze(self):
+		generation_time = time.time()
 		try:
 			mg = generator.MazeGenerator(50, 50)
 			mg.create_maze("output.bmp")
 		except:
 			tkMessageBox.showerror("Error", "Maze generator failed!")
+		tkMessageBox.showinfo("Info",
+			"Maze successfully created!\n\n" +
+			"Elapsed time:\t\t%.5lfs" % (time.time() - generation_time)
+		)
 
 
 	def ent_filename_on_enter(self, event):
