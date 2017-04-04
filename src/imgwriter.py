@@ -47,20 +47,22 @@ class ImageWriter:
 	# Transforms pixel map to pixel list
 	def map_to_list(self, pixel_map, map_size):
 		# Since we saved the pixels in a matrix, we now need to transform it back to list
+		# We use map function to execute to_pixel on every list element in pixel_map
 		pixel_list = []
-
 		for x in range(map_size[1]):
-			for y in range(map_size[0]):
-				if pixel_map[x][y] == 0:
-					pixel_list.append(0)
-				elif pixel_map[x][y] == 1:
-					pixel_list.append((255, 255, 255))
-				else:
-					pixel_list.append((int(pixel_map[x][y]), 0, 255 - int(pixel_map[x][y])))
-
+			pixel_list += map(self.to_pixel, pixel_map[x])
 		return pixel_list
+	
 
-
+	def to_pixel(self, x):
+		if x == 0:
+			return 0
+		elif x == 1:
+			return (255, 255, 255)
+		else:
+			return (int(x), 0, int(255 - x))
+	
+	
 	# Resets the pixel map to delete previous path
 	def reset_map(self, pixel_map, map_size):
 		for x in range(map_size[1]):
