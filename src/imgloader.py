@@ -1,6 +1,6 @@
-import os
-from PIL import Image
 import threading
+from PIL import Image
+import filepath
 
 class ImageLoader:
 
@@ -12,9 +12,7 @@ class ImageLoader:
 		self.w = 0
 
 		# Opening image file
-		parent_dir, curr_dir = os.path.split(os.getcwd())
-		mazes_path = os.path.join(parent_dir, "mazes")
-		im = Image.open(os.path.join(mazes_path, filename))
+		im = Image.open(filepath.get_filepath("mazes", filename))
 		im = im.convert("RGB")
 		# Getting values from the image object
 		pixel_list = list(im.getdata())
@@ -30,7 +28,7 @@ class ImageLoader:
 		# print "Creating threads..."
 		t1 = threading.Thread(target = self.fill_out_pixel_map, args = (pixel_list, 0, self.h/2, 0,))
 		t2 = threading.Thread(target = self.fill_out_pixel_map, args = (pixel_list, self.h/2, self.h, self.h/2*self.w,))
-	
+
 		# print "Starting threads..."
 		t1.start()
 		t2.start()
@@ -56,4 +54,3 @@ class ImageLoader:
 				if pixel_list[it] < (125, 125, 125):
 					self.pixel_map[i][j] = 0
 				it += 1
-

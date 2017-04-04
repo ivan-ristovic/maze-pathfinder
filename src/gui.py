@@ -255,7 +255,7 @@ class Application(Tkinter.Tk):
 		except:
 			tkMessageBox.showerror("Error",
 				"File not found!\n" +
-				"Make sure that the maze you are loading is in assets folder!"
+				"Make sure that the maze you are loading is in mazes folder!"
 			)
 			self.img = None
 			return

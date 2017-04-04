@@ -1,6 +1,6 @@
-import os
 from PIL import Image
 from random import shuffle, randrange
+import filepath
 
 class MazeGenerator:
 
@@ -69,7 +69,4 @@ class MazeGenerator:
 		# Writing image to file
 		img = Image.new("RGB", (self.w + 1, self.h + 1))
 		img.putdata(pixel_list)
-		parent_dir, curr_dir = os.path.split(os.getcwd())
-		mazes_path = os.path.join(parent_dir, "mazes")
-		new_filename = os.path.join(mazes_path, filename)
-		img.save(new_filename)
+		img.save(filepath.get_filepath("mazes", filename))
