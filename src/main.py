@@ -1,5 +1,5 @@
 import Tkinter
-import sys
+import os, sys
 import gui
 import filepath
 

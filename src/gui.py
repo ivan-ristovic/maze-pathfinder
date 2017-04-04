@@ -8,6 +8,7 @@ import imgloader, imgwriter
 import graph, traverser
 import dfs, bfs, dijkstra, astar
 import generator
+import filepath
 
 
 class Application(Tkinter.Tk):
@@ -153,8 +154,9 @@ class Application(Tkinter.Tk):
 		cb_show_solution.select()
 
 		# Expand button
+		self.img_expand = Tkinter.PhotoImage(file=filepath.get_filepath("assets", "expand.gif"))
+		self.img_shrink = Tkinter.PhotoImage(file=filepath.get_filepath("assets", "shrink.gif"))
 		self.btn_expand = Tkinter.Button(self,
-			text = "v",
 			width = 50, height = 1,
 			command = self.toggle_expand
 		)
@@ -163,12 +165,13 @@ class Application(Tkinter.Tk):
 			columnspan = 5,
 			padx = 0, pady = 0
 		)
+		self.btn_expand.config(image=self.img_expand, height = 20, width = 355)
 
 
 	def toggle_expand(self):
 		self.expanded = not self.expanded
 		if self.expanded:
-			self.btn_expand.config(text = "^")
+			self.btn_expand.config(image=self.img_shrink, height = 20, width = 355)
 			# Creating all additional widgets:
 			# Group
 			self.grp_maze_gen = Tkinter.LabelFrame(self, text = "Maze generator", padx = 5, pady = 5)
@@ -208,7 +211,7 @@ class Application(Tkinter.Tk):
 			)
 
 		else:
-			self.btn_expand.config(text = "v")
+			self.btn_expand.config(image=self.img_expand, height = 20, width = 355)
 			# Destroying all widgets
 			self.grp_maze_gen.destroy()
 			self.lbl_maze_size.destroy()
