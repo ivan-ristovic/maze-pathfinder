@@ -3,6 +3,7 @@ src/*.bmp
 mazes/out_*.bmp
 mazes/*_out.bmp
 mazes/feature_maze_original.bmp
+generator_*.bmp
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

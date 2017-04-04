@@ -1,3 +1,4 @@
+import os
 from PIL import Image
 from random import shuffle, randrange
 
@@ -40,31 +41,35 @@ class MazeGenerator:
 		for (a, b) in zip(hor, ver):
 			s += ''.join(a + b)
 
-		# String -> List (for PIL) and print to file
-		def print_output(filename):
-			# String -> List
-			pixel_list = []
-			for c in s:
-				if c == '0':
-					pixel_list.append((255, 255, 255))
-				else:
-					pixel_list.append(0)
-
-			# Creating starting point
-			for i in range(1, self.w):
-				if pixel_list[i] == 0 and pixel_list[i + self.w + 1] == (255, 255, 255):
-					pixel_list[i] = (255, 255, 255)
-					break
-			# Creating exit point
-			for i in range(len(pixel_list) - 2, len(pixel_list) - self.w, -1):
-				if pixel_list[i] == 0 and pixel_list[i - self.w - 1] == (255, 255, 255):
-					pixel_list[i] = (255, 255, 255)
-					break
-
-			# Writing image to file
-			img = Image.new("RGB", (self.w + 1, self.h + 1))
-			img.putdata(pixel_list)
-			img.save(filename)
-
 		# Printing output
-		print_output(filename)
+		self.print_output(s, filename)
+
+
+	# String -> List (for PIL) and print to file
+	def print_output(self, result, filename):
+		# String -> List
+		pixel_list = []
+		for c in result:
+			if c == '0':
+				pixel_list.append((255, 255, 255))
+			else:
+				pixel_list.append(0)
+
+		# Creating starting point
+		for i in range(1, self.w):
+			if pixel_list[i] == 0 and pixel_list[i + self.w + 1] == (255, 255, 255):
+				pixel_list[i] = (255, 255, 255)
+				break
+		# Creating exit point
+		for i in range(len(pixel_list) - 2, len(pixel_list) - self.w, -1):
+			if pixel_list[i] == 0 and pixel_list[i - self.w - 1] == (255, 255, 255):
+				pixel_list[i] = (255, 255, 255)
+				break
+
+		# Writing image to file
+		img = Image.new("RGB", (self.w + 1, self.h + 1))
+		img.putdata(pixel_list)
+		parent_dir, curr_dir = os.path.split(os.getcwd())
+		mazes_path = os.path.join(parent_dir, "mazes")
+		new_filename = os.path.join(mazes_path, filename)
+		img.save(new_filename)
