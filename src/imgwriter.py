@@ -1,5 +1,6 @@
 from PIL import Image
 import filepath
+import threading
 
 class ImageWriter:
 
@@ -47,20 +48,40 @@ class ImageWriter:
 	# Transforms pixel map to pixel list
 	def map_to_list(self, pixel_map, map_size):
 		# Since we saved the pixels in a matrix, we now need to transform it back to list
-		# We use map function to execute to_pixel on every list element in pixel_map
-		pixel_list = []
-		for x in range(map_size[1]):
-			pixel_list += map(self.to_pixel, pixel_map[x])
-		return pixel_list
-	
+		# Next two functions have only local usage
+		def to_pixel(x):
+			if x == 0:
+				return 0
+			elif x == 1:
+				return (255, 255, 255)
+			else:
+				return (int(x), 0, int(255 - x))
 
-	def to_pixel(self, x):
-		if x == 0:
-			return 0
-		elif x == 1:
-			return (255, 255, 255)
-		else:
-			return (int(x), 0, int(255 - x))
+		def part_to_pixel_list(result_map, pixel_map, h_min, h_max, index):
+			result = []
+			# We use map function to execute to_pixel on every list element in sublist
+			for x in range(h_min, h_max):
+				result += map(to_pixel, pixel_map[x])
+			result_map[index] = result
+
+
+		# result_map is needed to store the return value of the function
+		result_map = {}
+		t1 = threading.Thread(target = part_to_pixel_list, args = (result_map, pixel_map, 0, map_size[1]/2, 1, ))
+		t2 = threading.Thread(target = part_to_pixel_list, args = (result_map, pixel_map, map_size[1]/2, map_size[1], 2, ))
+
+		t1.start()
+		t2.start()
+
+		t1.join()
+		t2.join()
+
+		pixel_list = []
+		pixel_list += result_map[1]
+		pixel_list += result_map[2]
+		
+		return pixel_list
+		
 	
 	
 	# Resets the pixel map to delete previous path
