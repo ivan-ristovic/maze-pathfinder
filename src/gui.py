@@ -217,9 +217,10 @@ class Application(Tkinter.Tk):
 
 
 	def generate_maze(self):
+		size = self.sld_mazegen_size.get()
 		generation_time = time.time()
 		try:
-			mg = generator.MazeGenerator(50, 50)
+			mg = generator.MazeGenerator(size, size)
 			mg.create_maze("output.bmp")
 		except:
 			tkMessageBox.showerror("Error", "Maze generator failed!")

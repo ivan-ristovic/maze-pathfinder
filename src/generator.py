@@ -52,12 +52,12 @@ class MazeGenerator:
 
 			# Creating starting point
 			for i in range(1, self.w):
-				if pixel_list[i] == 0 and pixel_list[i + self.w] == (255, 255, 255):
+				if pixel_list[i] == 0 and pixel_list[i + self.w + 1] == (255, 255, 255):
 					pixel_list[i] = (255, 255, 255)
 					break
 			# Creating exit point
 			for i in range(len(pixel_list) - 2, len(pixel_list) - self.w, -1):
-				if pixel_list[i] == 0 and pixel_list[i - self.w] == (255, 255, 255):
+				if pixel_list[i] == 0 and pixel_list[i - self.w - 1] == (255, 255, 255):
 					pixel_list[i] = (255, 255, 255)
 					break
 
