@@ -6,7 +6,7 @@ class Node:
 
 	def show(self):
 		print "(" + str(self.x) + ", " + str(self.y) + ")"
-	
+
 	# Difference between the node and the other node in pixels
 	def diff(self, other):
 		return abs(self.x - other.x) + abs(self.y - other.y)

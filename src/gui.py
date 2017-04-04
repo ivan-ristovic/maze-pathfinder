@@ -120,13 +120,30 @@ class Application(Tkinter.Tk):
 		rb_Astar = Tkinter.Radiobutton(grp_method,
 			text = "A*",
 			variable = self.rbSelectedValue,
-			value = "Astar"
+			value = "Astar",
 		)
 		rb_DFS.grid(column = 1, row = 1, padx = 5)
 		rb_BFS.grid(column = 2, row = 1, padx = 5)
 		rb_Dijkstra.grid(column = 3, row = 1, padx = 5)
 		rb_Astar.grid(column = 4, row = 1, padx = 5)
 		rb_DFS.select()
+
+		# Group for heuristic
+		grp_heuristic = Tkinter.LabelFrame(grp_method, text = "Heuristic (for A*):", padx = 5, pady = 5)
+		grp_heuristic.grid(column = 1, row = 2, padx = 10, pady = 5, columnspan = 4)
+		self.rb_heuristic_value = Tkinter.IntVar()
+		self.rb_heur_manhattan = Tkinter.Radiobutton(grp_heuristic,
+			text = "Manhattan heuristic",
+			variable = self.rb_heuristic_value,
+			value = 0
+		)
+		self.rb_heur_euclidean = Tkinter.Radiobutton(grp_heuristic,
+			text = "Euclidean heuristic",
+			variable = self.rb_heuristic_value,
+			value = 1
+		)
+		self.rb_heur_manhattan.grid(column = 0, row = 0, padx = 5)
+		self.rb_heur_euclidean.grid(column = 1, row = 0, padx = 5)
 
 		# Button to solve the maze
 		btn_solve = Tkinter.Button(self.grp_solver,
@@ -291,7 +308,6 @@ class Application(Tkinter.Tk):
 		)
 
 
-
 	def btn_solve_on_click(self):
 		if self.grp is None or self.img is None:
 			tkMessageBox.showerror("Error", "Please load a maze first!")
@@ -305,7 +321,7 @@ class Application(Tkinter.Tk):
 		elif self.rbSelectedValue.get() == "Dijkstra":
 			graph_traverser = dijkstra.Dijkstra(self.grp)
 		elif self.rbSelectedValue.get() == "Astar":
-			graph_traverser = astar.AStar(self.grp)
+			graph_traverser = astar.AStar(self.grp, self.rb_heuristic_value.get())
 
 		# Traversing the graph and getting traverse node path
 		traverse_time_start = time.time()

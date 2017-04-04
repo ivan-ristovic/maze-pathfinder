@@ -11,8 +11,10 @@ class Traverser:
 		self.path_length = 0
 		self.steps = 0
 		self.solved = False
-		# Parent map is used for the reconstruction of the path and to determine which nodes are already processed as well (not using 'visited' list any more)
+		# Parent map is used for the path reconstruction determining which nodes
+		# are already processed
 		self.parent_map = {}
+
 
 	# Must be implemented in derived classes
 	def traverse(self):

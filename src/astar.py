@@ -4,13 +4,23 @@ import heapq
 
 class AStar(traverser.Traverser):
 
+	# Constructor
+	def __init__(self, graph, heuristic):
+		# Calling super constructor
+		traverser.Traverser.__init__(self, graph)
+		# Setting heuristic
+		if heuristic == 0:
+			self.heuristic = self.manhattan_heuristic()
+		else:
+			self.heuristic = self.euclidean_heuristic()
+
+
 	# Override
 	def traverse(self):
 		self.initialize()
 		self.path = deque()
 
-		heuristic = self.manhattan_heuristic()
-		self.astar_traverse(heuristic)
+		self.astar_traverse(self.heuristic)
 
 		return list(self.path), self.steps
 
@@ -20,6 +30,18 @@ class AStar(traverser.Traverser):
 		h = {}
 		for node in self.maze.V:
 			h[node] = node.diff(self.maze.end)
+		return h
+
+
+	# Determining heuristic: Euclidean distance
+	def euclidean_heuristic(self):
+		h = {}
+		import math
+		for node in self.maze.V:
+			h[node] = math.sqrt(
+				(node.x - self.maze.end.x)*(node.x - self.maze.end.x) +
+				(node.y - self.maze.end.y)*(node.y - self.maze.end.y)
+			)
 		return h
 
 
