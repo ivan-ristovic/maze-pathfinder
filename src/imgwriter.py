@@ -55,7 +55,7 @@ class ImageWriter:
 			elif x == 1:
 				return (255, 255, 255)
 			else:
-				return (int(x), 0, int(255 - x))
+				return (0, int(x), int(255 - x))
 
 		def part_to_pixel_list(result_map, pixel_map, h_min, h_max, index):
 			result = []
