@@ -35,7 +35,7 @@ class ImageWriter:
 		value_b = hex_to_dec(color_start[5]) * 16 + hex_to_dec(color_start[6])
 
 		diff_r = value_r - hex_to_dec(color_end[1]) * 16 - hex_to_dec(color_end[2])
-		diff_g = value_g - hex_to_dec(color_end[1]) * 16 - hex_to_dec(color_end[2])
+		diff_g = value_g - hex_to_dec(color_end[3]) * 16 - hex_to_dec(color_end[4])
 		diff_b = value_b - hex_to_dec(color_end[5]) * 16 - hex_to_dec(color_end[6])
 
 		step_r = float(diff_r) / path_length
