@@ -319,23 +319,21 @@ class Application(Tkinter.Tk):
 		elif self.rbSelectedValue.get() == "BFS":
 			graph_traverser = bfs.BFS(self.grp)
 		elif self.rbSelectedValue.get() == "Dijkstra":
-			graph_traverser = dijkstra.Dijkstra(self.grp)
+			graph_traverser = dijkstra.Dijkstra(self.grp, None)
 		elif self.rbSelectedValue.get() == "Astar":
 			graph_traverser = astar.AStar(self.grp, self.rb_heuristic_value.get())
 
 		# Traversing the graph and getting traverse node path
 		traverse_time_start = time.time()
-		# try:
-		path, steps = graph_traverser.traverse()
-		# except:
-		# 	tkMessageBox.showerror("Error", "Unknown error!")
+		try:
+			path, steps = graph_traverser.traverse()
+			if path == []:
+				raise Exception
+		except:
+			tkMessageBox.showerror("Error", "Unknown error!")
 		traverse_time_end = time.time()
-		if path == []:
-			tkMessageBox.showerror("Error", "Maze not solved!")
-			return
 
 		imgwrite_time_start = time.time()
-
 		# Creating new image writer so we can write our new image to the file
 		iw = imgwriter.ImageWriter(self.img.mode, self.img.pixel_map, (self.img.w, self.img.h))
 		# Applying path to image module
