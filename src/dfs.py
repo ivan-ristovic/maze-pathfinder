@@ -16,8 +16,6 @@ class DFS(traverser.Traverser):
 			self.parent_map[self.maze.start] = None
 			self.dfs_traverse_recursive(self.maze.start)
 
-
-
 		# Calculating path length
 		# TODO efficient: calculate it in traverse functions
 		# FIXME path_len is calculating wrong? (MAYBE)
@@ -59,18 +57,6 @@ class DFS(traverser.Traverser):
 			if has_nonvisited_neighbors == False:
 				self.path.pop()
 
-			# TODO HACK maybe add label on top of the while loop and just
-			# continue that loop when we find one non-visited node?
-			# Then there will be no need for this indicator, something like:
-			# ...
-			# for all neighbors:
-			# 	if self.visited[..] = false
-			# 		push it
-			# 		mark it
-			#		continue while
-			# path.pop()	- no need for indicator since if we made it here,
-			#                 we are sure that it is a dead end
-
 
 	def dfs_traverse_recursive(self, node):
 
@@ -89,5 +75,3 @@ class DFS(traverser.Traverser):
 						self.path.pop()
 					else:
 						return
-
-

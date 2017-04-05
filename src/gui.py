@@ -163,12 +163,12 @@ class Application(Tkinter.Tk):
 		self.btn_color_from = Tkinter.Button(self.grp_solver,
 			text = "     ",
 			command = self.choose_color_from,
-			bg = "green"
+			bg = "#00ff00"
 		)
 		self.btn_color_to = Tkinter.Button(self.grp_solver,
 			text = "     ",
 			command = self.choose_color_to,
-			bg = "blue"
+			bg = "#0000ff"
 		)
 		self.btn_color_from.grid(column = 0, row = 2)
 		self.btn_color_to.grid(column = 3, row = 2)
@@ -371,7 +371,10 @@ class Application(Tkinter.Tk):
 
 		imgwrite_time_start = time.time()
 		# Creating new image writer so we can write our new image to the file
-		iw = imgwriter.ImageWriter(self.img.mode, self.img.pixel_map, (self.img.w, self.img.h))
+		iw = imgwriter.ImageWriter(
+			self.img.mode, self.img.pixel_map, (self.img.w, self.img.h),
+			self.btn_color_from.cget("bg"), self.btn_color_to.cget("bg")
+		)
 		# Applying path to image module
 		iw.apply_path(path, graph_traverser.path_length, self.img.pixel_map, (self.img.w, self.img.h))
 		# Saving an image of the solved maze
