@@ -105,22 +105,26 @@ class Application(Tkinter.Tk):
 		rb_DFS = Tkinter.Radiobutton(grp_method,
 			text = "DFS",
 			variable = self.rbSelectedValue,
-			value = "DFS"
+			value = "DFS",
+			command = self.disable_heuristic
 		)
 		rb_BFS = Tkinter.Radiobutton(grp_method,
 			text  =  "BFS",
 			variable = self.rbSelectedValue,
-			value = "BFS"
+			value = "BFS",
+			command = self.disable_heuristic
 		)
 		rb_Dijkstra = Tkinter.Radiobutton(grp_method,
 			text = "Dijkstra",
 			variable = self.rbSelectedValue,
-			value = "Dijkstra"
+			value = "Dijkstra",
+			command = self.disable_heuristic
 		)
 		rb_Astar = Tkinter.Radiobutton(grp_method,
 			text = "A*",
 			variable = self.rbSelectedValue,
-			value = "Astar"
+			value = "Astar",
+			command = self.activate_heuristic
 		)
 		rb_DFS.grid(column = 1, row = 1, padx = 5)
 		rb_BFS.grid(column = 2, row = 1, padx = 5)
@@ -133,17 +137,18 @@ class Application(Tkinter.Tk):
 		grp_heuristic.grid(column = 1, row = 2, padx = 10, pady = 5, columnspan = 4)
 		self.rb_heuristic_value = Tkinter.IntVar()
 		self.rb_heur_manhattan = Tkinter.Radiobutton(grp_heuristic,
-			text = "Manhattan heuristic",
+			text = "Manhattan",
 			variable = self.rb_heuristic_value,
 			value = 0
 		)
 		self.rb_heur_euclidean = Tkinter.Radiobutton(grp_heuristic,
-			text = "Euclidean heuristic",
+			text = "Euclidean",
 			variable = self.rb_heuristic_value,
 			value = 1
 		)
 		self.rb_heur_manhattan.grid(column = 0, row = 0, padx = 5)
 		self.rb_heur_euclidean.grid(column = 1, row = 0, padx = 5)
+		self.disable_heuristic()
 
 		# Button to solve the maze
 		btn_solve = Tkinter.Button(self.grp_solver,
@@ -183,6 +188,16 @@ class Application(Tkinter.Tk):
 			padx = 0, pady = 0
 		)
 		self.btn_expand.config(image=self.img_expand, height = 20, width = 355)
+
+
+	def activate_heuristic(self):
+		self.rb_heur_manhattan.configure(state = "active")
+		self.rb_heur_euclidean.configure(state = "active")
+
+
+	def disable_heuristic(self):
+		self.rb_heur_manhattan.configure(state = "disabled")
+		self.rb_heur_euclidean.configure(state = "disabled")
 
 
 	def toggle_expand(self):
