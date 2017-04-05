@@ -5,9 +5,11 @@ import threading
 class ImageWriter:
 
 	# Constructor
-	def __init__(self, mode, pixel_map, size):
+	def __init__(self, mode, pixel_map, size, color_start, color_end):
 		# Creating new image module with given parameters
 		self.img = Image.new(mode, size)
+
+		# TODO COLORS :)
 
 
 	# Saves the module to file with a given name
@@ -79,11 +81,11 @@ class ImageWriter:
 		pixel_list = []
 		pixel_list += result_map[1]
 		pixel_list += result_map[2]
-		
+
 		return pixel_list
-		
-	
-	
+
+
+
 	# Resets the pixel map to delete previous path
 	def reset_map(self, pixel_map, map_size):
 		for x in range(map_size[1]):
