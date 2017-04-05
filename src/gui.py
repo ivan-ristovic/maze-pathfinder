@@ -120,7 +120,7 @@ class Application(Tkinter.Tk):
 		rb_Astar = Tkinter.Radiobutton(grp_method,
 			text = "A*",
 			variable = self.rbSelectedValue,
-			value = "Astar",
+			value = "Astar"
 		)
 		rb_DFS.grid(column = 1, row = 1, padx = 5)
 		rb_BFS.grid(column = 2, row = 1, padx = 5)
