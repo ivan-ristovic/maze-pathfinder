@@ -371,12 +371,9 @@ class Application(Tkinter.Tk):
 
 		imgwrite_time_start = time.time()
 		# Creating new image writer so we can write our new image to the file
-		iw = imgwriter.ImageWriter(
-			self.img.mode, self.img.pixel_map, (self.img.w, self.img.h),
-			self.btn_color_from.cget("bg"), self.btn_color_to.cget("bg")
-		)
+		iw = imgwriter.ImageWriter(self.img.mode, self.img.pixel_map, (self.img.w, self.img.h))
 		# Applying path to image module
-		iw.apply_path(path, graph_traverser.path_length, self.img.pixel_map, (self.img.w, self.img.h))
+		iw.apply_path(path, graph_traverser.path_length, self.img.pixel_map, (self.img.w, self.img.h), self.btn_color_from.cget("bg"), self.btn_color_to.cget("bg"))
 		# Saving an image of the solved maze
 		iw.img.putdata(iw.map_to_list(self.img.pixel_map, (self.img.w, self.img.h)))
 		# Writing our image to output file

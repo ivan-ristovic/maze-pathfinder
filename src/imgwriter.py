@@ -5,7 +5,7 @@ import threading
 class ImageWriter:
 
 	# Constructor
-	def __init__(self, mode, pixel_map, size, color_start, color_end):
+	def __init__(self, mode, pixel_map, size):
 		# Creating new image module with given parameters
 		self.img = Image.new(mode, size)
 
@@ -20,13 +20,29 @@ class ImageWriter:
 
 
 	# Applies the path to the pixel_map
-	def apply_path(self, path, path_length, pixel_map, map_size):
+	def apply_path(self, path, path_length, pixel_map, map_size, color_start, color_end):
 		self.reset_map(pixel_map, map_size)
-
-		# For every node in path list: color his location and path to next node
 		nodes_in_path = len(path)
-		step = 255.0 / path_length
-		r = 2.0
+		
+		def hex_to_dec(char):
+			if char.isalpha():
+				return ord(char) - ord('a') + 10
+			else:
+				return int(char)
+		
+		value_r = hex_to_dec(color_start[1]) * 16 + hex_to_dec(color_start[2])
+		value_g = hex_to_dec(color_start[3]) * 16 + hex_to_dec(color_start[4])
+		value_b = hex_to_dec(color_start[5]) * 16 + hex_to_dec(color_start[6])
+
+		diff_r = value_r - hex_to_dec(color_end[1]) * 16 - hex_to_dec(color_end[2])
+		diff_g = value_g - hex_to_dec(color_end[1]) * 16 - hex_to_dec(color_end[2])
+		diff_b = value_b - hex_to_dec(color_end[5]) * 16 - hex_to_dec(color_end[6])
+
+		step_r = float(diff_r) / path_length
+		step_g = float(diff_g) / path_length
+		step_b = float(diff_b) / path_length
+		
+		# For every node in path list: color his location and path to next node
 		for i in range(nodes_in_path-1):
 			cur = path[i]
 			nxt = path[i+1]
@@ -35,18 +51,21 @@ class ImageWriter:
 				start = min(nxt.x, cur.x)
 				end = max(nxt.x, cur.x)
 				while start <= end:
-					pixel_map[start][cur.y] = r
+					pixel_map[start][cur.y] = (int(value_r), int(value_g), int(value_b))
 					start += 1
-					r += step
+					value_r -= step_r
+					value_g -= step_g
+					value_b -= step_b
 			else:	# Vertical path
 				start = min(nxt.y, cur.y)
 				end = max(nxt.y, cur.y)
 				while start <= end:
-					pixel_map[cur.x][start] = r
+					pixel_map[cur.x][start] = (int(value_r), int(value_g), int(value_b))
 					start += 1
-					r += step
-
-
+					value_r -= step_r
+					value_g -= step_g
+					value_b -= step_b
+	
 	# Transforms pixel map to pixel list
 	def map_to_list(self, pixel_map, map_size):
 		# Since we saved the pixels in a matrix, we now need to transform it back to list
@@ -57,7 +76,8 @@ class ImageWriter:
 			elif x == 1:
 				return (255, 255, 255)
 			else:
-				return (0, int(x), int(255 - x))
+				# x is a tuple (r, g, b)
+				return x
 
 		def part_to_pixel_list(result_map, pixel_map, h_min, h_max, index):
 			result = []
