@@ -28,13 +28,15 @@ class ImageWriter:
 			else:
 				return int(char)
 
-		value_r = hex_to_dec(color_start[1]) * 16 + hex_to_dec(color_start[2])
-		value_g = hex_to_dec(color_start[3]) * 16 + hex_to_dec(color_start[4])
-		value_b = hex_to_dec(color_start[5]) * 16 + hex_to_dec(color_start[6])
-
-		diff_r = value_r - hex_to_dec(color_end[1]) * 16 - hex_to_dec(color_end[2])
-		diff_g = value_g - hex_to_dec(color_end[3]) * 16 - hex_to_dec(color_end[4])
-		diff_b = value_b - hex_to_dec(color_end[5]) * 16 - hex_to_dec(color_end[6])
+		start_values = map(hex_to_dec, color_start[1:])
+		end_values = map(hex_to_dec, color_end[1:])
+		value_r = start_values[0] * 16 + start_values[1]
+		value_g = start_values[2] * 16 + start_values[3]
+		value_b = start_values[4] * 16 + start_values[5]
+		
+		diff_r = value_r - end_values[0] * 16 - end_values[1]
+		diff_g = value_g - end_values[2] * 16 - end_values[3]
+		diff_b = value_b - end_values[4] * 16 - end_values[5]
 
 		step_r = float(diff_r) / path_length
 		step_g = float(diff_g) / path_length
