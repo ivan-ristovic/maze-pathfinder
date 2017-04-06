@@ -98,7 +98,17 @@ class ImageWriter:
 
 	# Resets the pixel map to delete previous path
 	def reset_map(self, pixel_map, map_size):
-		for x in range(map_size[1]):
-			for y in range(map_size[0]):
-				if pixel_map[x][y] >= 2:
-					pixel_map[x][y] = 1
+
+		def reset_map_part(pixel_map, h_min, h_max, width):
+			for x in range(h_min, h_max):
+				for y in range(width):
+					if pixel_map[x][y] >= 2:
+						pixel_map[x][y] = 1
+
+		t1 = threading.Thread(target = reset_map_part, args = (pixel_map, 0, map_size[1]/2, map_size[0], ) )
+		t2 = threading.Thread(target = reset_map_part, args = (pixel_map, map_size[1]/2, map_size[1], map_size[0], ))
+
+		t1.start()
+		t2.start()
+		t1.join()
+		t2.join()
