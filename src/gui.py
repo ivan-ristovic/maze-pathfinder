@@ -378,8 +378,8 @@ class Application(Tkinter.Tk):
 			)
 		else:
 			iw.apply_path(path, graph_traverser.path_length, self.img.pixel_map, (self.img.w, self.img.h),
-			self.btn_color_from.cget("bg"), self.btn_color_to.cget("bg")
-		)
+				self.btn_color_from.cget("bg"), self.btn_color_to.cget("bg")
+			)
 
 		# Saving an image of the solved maze
 		iw.img.putdata(iw.map_to_list(self.img.pixel_map, (self.img.w, self.img.h)))
