@@ -68,21 +68,12 @@ class ImageWriter:
 	# Transforms pixel map to pixel list
 	def map_to_list(self, pixel_map, map_size):
 		# Since we saved the pixels in a matrix, we now need to transform it back to list
-		# Next two functions have only local usage
-		def to_pixel(x):
-			if x == 0:
-				return 0
-			elif x == 1:
-				return (255, 255, 255)
-			else:
-				# x is a tuple (r, g, b)
-				return x
 
 		def part_to_pixel_list(result_map, pixel_map, h_min, h_max, index):
 			result = []
 			# We use map function to execute to_pixel on every list element in sublist
 			for x in range(h_min, h_max):
-				result += map(to_pixel, pixel_map[x])
+				result += map(lambda x: (255, 255, 255) if x == 1 else x, pixel_map[x])
 			result_map[index] = result
 
 		# result_map is needed to store the return value of the function
