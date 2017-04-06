@@ -49,19 +49,12 @@ class AStar(traverser.Traverser):
 		return h
 
 
-	def get_heuristic(self, heuristic, node):
-		if heuristic != None:
-			return heuristic[node]
-		else:
-			return 0
-
-
 	def astar_traverse(self, heuristic):
 		node = self.maze.start
 		# Storing heuristic, weight of the path until the node, the node and its parent
-		weight_heap = [(self.get_heuristic(heuristic, node), 0, node, None)]
+		weight_heap = [(lambda x: heuristic[node] if heuristic is not None else 0, 0, node, None)]
 		self.parent_map = {node : None}
-		# Closed list is a map of nodes that are finished processing
+		# Closed list is a map of nodes that are processed
 		closed_list = {}
 
 		while weight_heap:

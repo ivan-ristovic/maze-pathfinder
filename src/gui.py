@@ -174,7 +174,7 @@ class Application(Tkinter.Tk):
 		self.btn_color_to.grid(column = 3, row = 2)
 
 		# Open solution checkbox
-		self.show_solution = Tkinter.IntVar()
+		self.show_solution = Tkinter.BooleanVar()
 		cb_show_solution = Tkinter.Checkbutton(self.grp_solver,
 			text = "Open solution when finished",
 			variable = self.show_solution
@@ -399,7 +399,7 @@ class Application(Tkinter.Tk):
 			"Total execution time:\t\t%.5lfs" % (self.exec_time + (imgwrite_time_end - traverse_time_start))
 		)
 
-		if self.show_solution.get() == 1:
+		if self.show_solution.get() == True:
 			# Showing solution in new window
 			if sys.platform.startswith('linux'):
 				subprocess.call(["xdg-open", output_path])
