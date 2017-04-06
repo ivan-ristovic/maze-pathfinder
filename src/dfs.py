@@ -7,6 +7,7 @@ class DFS(traverser.Traverser):
 	# Override
 	def traverse(self):
 		self.initialize()
+
 		self.path = deque()
 		self.path.append(self.maze.start)
 		query = tkMessageBox.askquestion("DFS", "Prefer iterative over recursive?")
@@ -20,12 +21,8 @@ class DFS(traverser.Traverser):
 		# TODO efficient: calculate it in traverse functions
 		# FIXME path_len is calculating wrong? (MAYBE)
 		if self.solved:
-			current = self.maze.start
-			for node in self.path:
-				# node.show()
-				# print node.diff(current)
-				self.path_length += node.diff(current) + 1
-				current = node
+			self.form_path()
+
 		return list(self.path), self.steps
 
 
@@ -75,3 +72,12 @@ class DFS(traverser.Traverser):
 						self.path.pop()
 					else:
 						return
+
+
+	def form_path(self):
+		current = self.maze.start
+		for node in self.path:
+			# node.show()
+			# print node.diff(current)
+			self.path_length += node.diff(current) + 1
+			current = node

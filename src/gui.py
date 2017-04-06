@@ -363,6 +363,8 @@ class Application(Tkinter.Tk):
 		traverse_time_start = time.time()
 		try:
 			path, steps = graph_traverser.traverse()
+			if path == []:
+				raise Exception
 		except Exception as e:
 			tkMessageBox.showerror("Error", "Error message: " + str(e))
 			return

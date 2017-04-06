@@ -6,7 +6,13 @@ class BFS(traverser.Traverser):
 	# Override
 	def traverse(self):
 		self.initialize()
+
 		self.bfs_traverse()
+
+		# If the maze is not solved, there is no point in reconstruction of the path
+		if self.solved == True:
+			self.form_path()
+
 		return self.path, self.steps
 
 
@@ -28,14 +34,12 @@ class BFS(traverser.Traverser):
 					self.parent_map[n] = node
 					self.steps += 1
 
-		# Path reconstruction
-		if self.solved:
-			self.path = deque()
-			self.path.append(self.maze.end)
-			node = self.maze.end
-			while node != self.maze.start:
-				self.path_length += node.diff(self.parent_map[node]) + 1
-				node = self.parent_map[node]
-				self.path.appendleft(node)
-		else:
-			self.path = []
+
+	def form_path(self):
+		self.path = deque()
+		self.path.append(self.maze.end)
+		node = self.maze.end
+		while node != self.maze.start:
+			self.path_length += node.diff(self.parent_map[node]) + 1
+			node = self.parent_map[node]
+			self.path.appendleft(node)
