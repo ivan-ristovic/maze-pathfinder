@@ -19,3 +19,8 @@ class Traverser:
 	# Must be implemented in derived classes
 	def traverse(self):
 		raise NotImplementedError
+
+
+	# Must be implemented in derived classes
+	def form_path(self):
+		raise NotImplementedError

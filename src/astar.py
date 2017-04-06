@@ -22,6 +22,10 @@ class AStar(traverser.Traverser):
 
 		self.astar_traverse(self.heuristic)
 
+		# If the maze is not solved, there is no point in reconstruction of the path
+		if self.solved == True:
+			self.form_path()
+
 		return list(self.path), self.steps
 
 
@@ -80,11 +84,8 @@ class AStar(traverser.Traverser):
 					heapq.heappush(weight_heap, (new_weight, new_path, n, min_node))
 					self.steps += 1
 
-		# If the maze is not solved, there is no point in reconstruction of the path
-		if self.solved == False:
-			return
 
-		# Reconstruction of the path
+	def form_path(self):
 		# FIXME different path length for Dijkstra and Astar for 400.bmp: weeeiiiird???
 		self.path.append(self.maze.end)
 		current = self.maze.end

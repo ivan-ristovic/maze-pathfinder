@@ -9,5 +9,6 @@ class Dijkstra(astar.AStar):
 		self.path = deque()
 
 		self.astar_traverse(None)
+		self.form_path()
 
 		return list(self.path), self.steps
