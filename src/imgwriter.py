@@ -9,8 +9,6 @@ class ImageWriter:
 		# Creating new image module with given parameters
 		self.img = Image.new(mode, size)
 
-		# TODO COLORS :)
-
 
 	# Saves the module to file with a given name
 	def write(self, filename):
@@ -23,13 +21,13 @@ class ImageWriter:
 	def apply_path(self, path, path_length, pixel_map, map_size, color_start, color_end):
 		self.reset_map(pixel_map, map_size)
 		nodes_in_path = len(path)
-		
+
 		def hex_to_dec(char):
 			if char.isalpha():
 				return ord(char) - ord('a') + 10
 			else:
 				return int(char)
-		
+
 		value_r = hex_to_dec(color_start[1]) * 16 + hex_to_dec(color_start[2])
 		value_g = hex_to_dec(color_start[3]) * 16 + hex_to_dec(color_start[4])
 		value_b = hex_to_dec(color_start[5]) * 16 + hex_to_dec(color_start[6])
@@ -41,7 +39,7 @@ class ImageWriter:
 		step_r = float(diff_r) / path_length
 		step_g = float(diff_g) / path_length
 		step_b = float(diff_b) / path_length
-		
+
 		# For every node in path list: color his location and path to next node
 		for i in range(nodes_in_path-1):
 			cur = path[i]
@@ -65,7 +63,8 @@ class ImageWriter:
 					value_r -= step_r
 					value_g -= step_g
 					value_b -= step_b
-	
+
+
 	# Transforms pixel map to pixel list
 	def map_to_list(self, pixel_map, map_size):
 		# Since we saved the pixels in a matrix, we now need to transform it back to list
@@ -86,7 +85,6 @@ class ImageWriter:
 				result += map(to_pixel, pixel_map[x])
 			result_map[index] = result
 
-
 		# result_map is needed to store the return value of the function
 		result_map = {}
 		t1 = threading.Thread(target = part_to_pixel_list, args = (result_map, pixel_map, 0, map_size[1]/2, 1, ))
@@ -103,7 +101,6 @@ class ImageWriter:
 		pixel_list += result_map[2]
 
 		return pixel_list
-
 
 
 	# Resets the pixel map to delete previous path

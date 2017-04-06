@@ -278,8 +278,8 @@ class Application(Tkinter.Tk):
 		try:
 			mg = generator.MazeGenerator(size, size)
 			mg.create_maze("generator_" + str(size) + ".bmp")
-		except:
-			tkMessageBox.showerror("Error", "Maze generator failed!")
+		except Exception as e:
+			tkMessageBox.showerror("Error", "Error message: " + str(e))
 		tkMessageBox.showinfo("Info",
 			"Maze successfully created!\n\n" +
 			"Elapsed time:\t\t%.5lfs" % (time.time() - generation_time)
@@ -301,8 +301,8 @@ class Application(Tkinter.Tk):
 				self.ent_filename.delete(0, Tkinter.END)
 				self.ent_filename.insert(0, os.path.relpath(self.filename))
 				os.chdir(os.path.join(parent_dir, "src"))
-			except ValueError:
-				tkMessageBox.showerror("Error", "Cannot open that file!")
+			except Exception as e:
+				tkMessageBox.showerror("Error", "Error message: " + str(e))
 
 
 	def btn_import_on_click(self):
@@ -363,10 +363,9 @@ class Application(Tkinter.Tk):
 		traverse_time_start = time.time()
 		try:
 			path, steps = graph_traverser.traverse()
-			if path == []:
-				raise Exception
-		except:
-			tkMessageBox.showerror("Error", "Unknown error!")
+		except Exception as e:
+			tkMessageBox.showerror("Error", "Error message: " + str(e))
+			return
 		traverse_time_end = time.time()
 
 		imgwrite_time_start = time.time()
