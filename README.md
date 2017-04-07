@@ -1,4 +1,5 @@
 # :sparkles: maze-pathfinder :sparkles:
+![ss](https://raw.githubusercontent.com/ivan-ristovic/maze-pathfinder/master/screenshots/feature_gui.PNG)
 ![ss](https://raw.githubusercontent.com/ivan-ristovic/maze-pathfinder/master/mazes/feature_maze.bmp)
 
 ## :page_facing_up: Description :page_facing_up:
