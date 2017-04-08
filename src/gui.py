@@ -386,7 +386,8 @@ class Application(Tkinter.Tk):
 		# Saving an image of the solved maze
 		iw.img.putdata(iw.map_to_list(self.img.pixel_map, (self.img.w, self.img.h)))
 		# Writing our image to output file
-		output_path = iw.write(self.filename[:-4] + "_" + self.rbSelectedValue.get() + "_out" + ".bmp")
+		filename , extension = os.path.splitext(self.filename)
+		output_path = iw.write(filename + "_" + self.rbSelectedValue.get() + "_out" + extension)
 
 		imgwrite_time_end = time.time()
 
