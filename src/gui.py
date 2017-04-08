@@ -1,9 +1,7 @@
 from PIL import Image
 from tkColorChooser import askcolor
-import Tkinter
-import tkMessageBox, tkFileDialog
-import os, sys, time
-import subprocess
+import Tkinter, tkMessageBox, tkFileDialog
+import os, sys, time, threading, subprocess
 
 import imgloader, imgwriter
 import graph, traverser
@@ -305,31 +303,44 @@ class Application(Tkinter.Tk):
 				tkMessageBox.showerror("Error", "Error message: " + str(e))
 
 
+	def perform_process(self, function, message):
+		# Popup initialization
+		popup = Tkinter.Toplevel(self)
+		popup.grab_set()
+		popup.wm_title("Working...")
+		if sys.platform.startswith('linux'):
+			img = Tkinter.PhotoImage(file = filepath.get_filepath("assets", "icon.png"))
+			popup.tk.call('wm', 'iconphoto', popup._w, img)
+		else:
+			popup.iconbitmap(os.path.abspath(filepath.get_filepath("assets", "icon.ico")))
+		popup.geometry(
+			'%dx%d+%d+%d' % (250, 50, self.winfo_x() + 50, self.winfo_y() + 100)
+		)
+		popup.resizable(False, False)
+		info_label = Tkinter.Label(popup, text = message)
+		info_label.place(relx = 0.5, rely = 0.5, anchor = Tkinter.CENTER)
+
+		# Starting process
+		thread = threading.Thread(target = function)
+		thread.start()
+		while thread.is_alive():
+			popup.update()
+			time.sleep(0.001)
+		popup.grab_release()
+		popup.destroy()
+
+
 	def btn_import_on_click(self):
-		# Loading image from file
+		# Loading image from file...
 		loading_time_start = time.time()
-		try:
-			self.filename = self.ent_filename.get()
-			self.img = imgloader.ImageLoader(self.filename)
-		except:
-			tkMessageBox.showerror("Error",
-				"File not found!\n" +
-				"Make sure that the maze you are loading is in mazes folder!"
-			)
-			self.img = None
+		self.perform_process(lambda: self.load_from_file(self.ent_filename.get()), "Loading image...")
+		if self.img is None:
 			return
 
 		# Creating graph
 		graph_time_start = time.time()
-		try:
-			self.grp = graph.Graph(self.img.pixel_map, self.img.h, self.img.w)
-		except:
-			tkMessageBox.showerror("Error",
-				"Invalid image!\n" +
-				"Image must have a black border and only one entry and exit point\n" +
-				"Also, the exit point must not have a black square above it."
-			)
-			self.grp = None
+		self.perform_process(lambda: self.create_graph(), "Creating graph...")
+		if self.grp is None:
 			return
 		graph_time_end = time.time()
 
@@ -342,6 +353,30 @@ class Application(Tkinter.Tk):
 			"Nodes created:\t\t%u\n" % self.grp.nodes_num +
 			"Elapsed time:\t\t%.5lfs" % self.exec_time
 		)
+
+
+	def load_from_file(self, filename):
+		try:
+			self.filename = self.ent_filename.get()
+			self.img = imgloader.ImageLoader(self.filename)
+		except:
+			tkMessageBox.showerror("Error",
+				"File not found!\n" +
+				"Make sure that the maze you are loading is in mazes folder!"
+			)
+			self.img = None
+
+
+	def create_graph(self):
+		try:
+			self.grp = graph.Graph(self.img.pixel_map, self.img.h, self.img.w)
+		except:
+			tkMessageBox.showerror("Error",
+				"Invalid image!\n" +
+				"Image must have a black border and only one entry and exit point\n" +
+				"Also, the exit point must not have a black square above it."
+			)
+			self.grp = None
 
 
 	def btn_solve_on_click(self):
