@@ -1,8 +1,8 @@
 # :sparkles: maze-pathfinder :sparkles:
-![ss](https://raw.githubusercontent.com/ivan-ristovic/maze-pathfinder/master/screenshots/feature_gui.PNG)
 ![ss](https://raw.githubusercontent.com/ivan-ristovic/maze-pathfinder/master/mazes/feature_maze.bmp)
+![ss](https://raw.githubusercontent.com/ivan-ristovic/maze-pathfinder/master/screenshots/feature_gui.PNG)
 
-## :page_facing_up: Description :page_facing_up:
+## :page_facing_up: Description
 This is a simple program that takes maze input in form of an image and solves it using the
 algorithm of your choice.
 Program outputs an image with drawn exit path (if the maze is valid).
@@ -15,7 +15,7 @@ Rules for a valid maze:
 - Corridors should be 1px wide because then the program works optimally, but it is not mandatory
 (the output will be correct for Dijkstra and A*, but might not be for DFS or BFS)
 
-## :computer: Installation :computer:
+## :computer: Installation
 Download the project, navigate to the **/src** folder and run main.py
 ```
 $ python main.py
@@ -33,7 +33,7 @@ Additional information for PIL library can be found **[here](http://www.pythonwa
 - RAM should not be a problem (if you don't want to benchmark), but if you decide to run
 mazes greater than 4000x4000, you will need around 1GB of free RAM memory for best performance.
 
-## :video_game: Usage :video_game:
+## :video_game: Usage
 Mazes are loaded from **/mazes** folder, and you can put your custom mazes there.
 After you input the file name, you will need to load the maze.
 Then select an algorithm and start the solver. It might take some time, depending of the maze size.
@@ -45,5 +45,5 @@ You can also create you own maze! Expand the window by clicking on the arrow but
 Choose your maze size and your maze will be created in **/mazes** folder, named in
 the format: **generator_<size>**.
 
-## :bug: Known bugs :bug:
+## :bug: Known bugs
 None so far!
