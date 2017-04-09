@@ -5,7 +5,7 @@ import os, sys, time, threading, subprocess
 
 import imgloader, imgwriter
 import graph, traverser
-import dfs, bfs, dijkstra, astar
+import dfs_iterative, dfs_recursive, bfs, dijkstra, astar
 import generator
 import filepath
 
@@ -99,13 +99,17 @@ class Application(Tkinter.Tk):
 		grp_method = Tkinter.LabelFrame(self.grp_solver, text = "Traverse method:", padx = 5, pady = 5)
 		grp_method.grid(column = 0, row = 1, padx = 10, pady = 5, columnspan = 4)
 
+		def process_dfs_select():
+			self.dfs_query = tkMessageBox.askquestion("Info", "Use iterative (yes) or recursive (no)?")
+			self.disable_heuristic()
+
 		# Radio buttons for the traverse method
 		self.rbSelectedValue = Tkinter.StringVar()
 		rb_DFS = Tkinter.Radiobutton(grp_method,
 			text = "DFS",
 			variable = self.rbSelectedValue,
 			value = "DFS",
-			command = self.disable_heuristic
+			command = process_dfs_select,
 		)
 		rb_BFS = Tkinter.Radiobutton(grp_method,
 			text  =  "BFS",
@@ -129,7 +133,7 @@ class Application(Tkinter.Tk):
 		rb_BFS.grid(column = 2, row = 1, padx = 5)
 		rb_Dijkstra.grid(column = 3, row = 1, padx = 5)
 		rb_Astar.grid(column = 4, row = 1, padx = 5)
-		rb_DFS.select()
+		rb_BFS.select()
 
 		# Group for heuristic
 		grp_heuristic = Tkinter.LabelFrame(grp_method, text = "Heuristic (for A*):", padx = 5, pady = 5)
@@ -380,41 +384,68 @@ class Application(Tkinter.Tk):
 
 
 	def btn_solve_on_click(self):
+
 		if self.grp is None or self.img is None:
 			tkMessageBox.showerror("Error", "Please load a maze first!")
 			return
 
+		self.perform_process(lambda: self.traverse_graph(), "Traversing graph...")
+		self.perform_process(lambda: self.write_to_file(), "Writing to file...")
+
+		tkMessageBox.showinfo("Info",
+			"Solved the maze in " + str(self.steps) + " steps!\n" +
+			"Path length:\t\t%d\n" % self.graph_traverser.path_length +
+			"Graph loading time:\t\t%.5lfs\n" % self.exec_time +
+			"Graph traverse time:\t\t%.5lfs\n" % (self.traverse_time_end - self.traverse_time_start) +
+			"File writing time:\t\t%.5lfs\n" % (self.imgwrite_time_end - self.imgwrite_time_start) +
+			"Total execution time:\t\t%.5lfs" % (self.exec_time + (self.imgwrite_time_end - self.traverse_time_start))
+		)
+
+		if self.show_solution.get() == True:
+			# Showing solution in new window
+			if sys.platform.startswith('linux'):
+				subprocess.call(["xdg-open", self.output_path])
+			else:
+				os.startfile(self.output_path)
+
+
+	def traverse_graph(self):
+
 		# Creating new graph traverser
 		if self.rbSelectedValue.get() == "DFS":
-			graph_traverser = dfs.DFS(self.grp)
+			if self.dfs_query == "yes":
+				self.graph_traverser = dfs_iterative.DFSIterative(self.grp)
+			else:
+				self.graph_traverser = dfs_recursive.DFSRecursive(self.grp)
 		elif self.rbSelectedValue.get() == "BFS":
-			graph_traverser = bfs.BFS(self.grp)
+			self.graph_traverser = bfs.BFS(self.grp)
 		elif self.rbSelectedValue.get() == "Dijkstra":
-			graph_traverser = dijkstra.Dijkstra(self.grp, None)
+			self.graph_traverser = dijkstra.Dijkstra(self.grp, None)
 		elif self.rbSelectedValue.get() == "Astar":
-			graph_traverser = astar.AStar(self.grp, self.rb_heuristic_value.get())
+			self.graph_traverser = astar.AStar(self.grp, self.rb_heuristic_value.get())
 
 		# Traversing the graph and getting traverse node path
-		traverse_time_start = time.time()
-		try:
-			path, steps = graph_traverser.traverse()
-			if path == []:
-				raise Exception
-		except Exception as e:
-			tkMessageBox.showerror("Error", "Error message: " + str(e))
-			return
-		traverse_time_end = time.time()
+		self.traverse_time_start = time.time()
 
-		imgwrite_time_start = time.time()
+		self.path, self.steps = self.graph_traverser.traverse()
+		if self.path == []:
+			tkMessageBox.showerror("Error", "Graph traversing failed")
+
+		self.traverse_time_end = time.time()
+
+
+	def write_to_file(self):
+
+		self.imgwrite_time_start = time.time()
 		# Creating new image writer so we can write our new image to the file
 		iw = imgwriter.ImageWriter(self.img.mode, self.img.pixel_map, (self.img.w, self.img.h))
 		# Applying path to image module
-		if isinstance(graph_traverser, astar.AStar):
-			iw.apply_path(path, graph_traverser.path_length, self.img.pixel_map, (self.img.w, self.img.h),
+		if isinstance(self.graph_traverser, astar.AStar):
+			iw.apply_path(self.path, self.graph_traverser.path_length, self.img.pixel_map, (self.img.w, self.img.h),
 				self.btn_color_to.cget("bg"), self.btn_color_from.cget("bg")
 			)
 		else:
-			iw.apply_path(path, graph_traverser.path_length, self.img.pixel_map, (self.img.w, self.img.h),
+			iw.apply_path(self.path, self.graph_traverser.path_length, self.img.pixel_map, (self.img.w, self.img.h),
 				self.btn_color_from.cget("bg"), self.btn_color_to.cget("bg")
 			)
 
@@ -422,25 +453,8 @@ class Application(Tkinter.Tk):
 		iw.img.putdata(iw.map_to_list(self.img.pixel_map, (self.img.w, self.img.h)))
 		# Writing our image to output file
 		filename , extension = os.path.splitext(self.filename)
-		output_path = iw.write(filename + "_" + self.rbSelectedValue.get() + "_out" + extension)
-
-		imgwrite_time_end = time.time()
-
-		tkMessageBox.showinfo("Info",
-			"Solved the maze in " + str(steps) + " steps!\n" +
-			"Path length:\t\t%d\n" % graph_traverser.path_length +
-			"Graph loading time:\t\t%.5lfs\n" % self.exec_time +
-			"Graph traverse time:\t\t%.5lfs\n" % (traverse_time_end - traverse_time_start) +
-			"File writing time:\t\t%.5lfs\n" % (imgwrite_time_end - imgwrite_time_start) +
-			"Total execution time:\t\t%.5lfs" % (self.exec_time + (imgwrite_time_end - traverse_time_start))
-		)
-
-		if self.show_solution.get() == True:
-			# Showing solution in new window
-			if sys.platform.startswith('linux'):
-				subprocess.call(["xdg-open", output_path])
-			else:
-				os.startfile(output_path)
+		self.output_path = iw.write(filename + "_" + self.rbSelectedValue.get() + "_out" + extension)
+		self.imgwrite_time_end = time.time()
 
 
 	# Help window
