@@ -31,7 +31,10 @@ class Graph:
 				self.V.append(self.start)
 				upper_buffer[i] = self.start
 				break;
-
+		# If the start node is not changed, imported graph is invalid
+		if self.start == None:
+			raise Exception
+			
 		for i in range(1, h - 1):
 			left_neighbor = None
 			for j in range(1, w - 1):
@@ -75,6 +78,9 @@ class Graph:
 				self.V.append(self.end)
 				break;
 
+		# If the ending node is not changed, imported graph is invalid
+		if self.end == None:
+			raise Exception
 
 	def show(self):
 		print "Nodes:"

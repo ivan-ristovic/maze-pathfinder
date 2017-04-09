@@ -25,8 +25,9 @@ class AStar(traverser.Traverser):
 		# If the maze is not solved, there is no point in reconstruction of the path
 		if self.solved == True:
 			self.form_path()
-
-		return list(self.path), self.steps
+			return list(self.path), self.steps
+		else:
+			return [], self.steps
 
 
 	# Determining heuristic: Manhattan distance

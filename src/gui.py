@@ -343,8 +343,16 @@ class Application(Tkinter.Tk):
 
 		# Creating graph
 		graph_time_start = time.time()
-		self.perform_process(lambda: self.create_graph(), "Creating graph...")
-		if self.grp is None:
+		try:
+			self.perform_process(lambda: self.create_graph(), "Creating graph...")
+			if self.grp.nodes_num is None:
+				raise Exception
+		except:
+			tkMessageBox.showerror("Error",
+				"Invalid image!\n" +
+				"Image must have a black border and only one entry and exit point\n" +
+				"Also, the exit point must not have a black square above it."
+			)
 			return
 		graph_time_end = time.time()
 
@@ -372,15 +380,7 @@ class Application(Tkinter.Tk):
 
 
 	def create_graph(self):
-		try:
-			self.grp = graph.Graph(self.img.pixel_map, self.img.h, self.img.w)
-		except:
-			tkMessageBox.showerror("Error",
-				"Invalid image!\n" +
-				"Image must have a black border and only one entry and exit point\n" +
-				"Also, the exit point must not have a black square above it."
-			)
-			self.grp = None
+		self.grp = graph.Graph(self.img.pixel_map, self.img.h, self.img.w)
 
 
 	def btn_solve_on_click(self):

@@ -7,8 +7,10 @@ class DFSIterative(dfs.DFS):
 		dfs.DFS.traverse(self)
 
 		self.dfs_traverse_iterative()
-		return dfs.DFS.return_result(self, self.path, self.steps)
-
+		if self.solved:
+			return dfs.DFS.return_result(self, self.path, self.steps)
+		else:
+			return [], 0
 
 
 	def dfs_traverse_iterative(self):
