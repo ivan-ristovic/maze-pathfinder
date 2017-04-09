@@ -12,8 +12,9 @@ class BFS(traverser.Traverser):
 		# If the maze is not solved, there is no point in reconstruction of the path
 		if self.solved == True:
 			self.form_path()
-
-		return self.path, self.steps
+			return self.path, self.steps
+		else:
+			return [], self.steps
 
 
 	def bfs_traverse(self):
