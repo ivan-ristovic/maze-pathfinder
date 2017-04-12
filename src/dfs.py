@@ -13,8 +13,6 @@ class DFS(traverser.Traverser):
 
 	def return_result(self, path, steps):
 		# Calculating path length
-		# TODO efficient: calculate it in traverse functions
-		# FIXME path_len is calculating wrong? (MAYBE)
 		self.form_path(path)
 
 		return list(path), steps

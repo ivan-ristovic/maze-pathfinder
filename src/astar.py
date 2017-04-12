@@ -87,7 +87,6 @@ class AStar(traverser.Traverser):
 
 
 	def form_path(self):
-		# FIXME different path length for Dijkstra and Astar for 400.bmp: weeeiiiird???
 		self.path.append(self.maze.end)
 		current = self.maze.end
 		while self.parent_map[current] is not None:
