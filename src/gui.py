@@ -246,7 +246,8 @@ class Application(Tkinter.Tk):
 			self.sld_mazegen_size = Tkinter.Scale(self.grp_maze_gen,
 				from_ = 10, to = 70,
 				width = 40, length = 170,
-				orient = Tkinter.HORIZONTAL
+				orient = Tkinter.HORIZONTAL,
+				resolution = 2
 			)
 			self.sld_mazegen_size.grid(
 				column = 2, row = 6,
