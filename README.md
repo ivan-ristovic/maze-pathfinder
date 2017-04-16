@@ -30,6 +30,7 @@ You must have the **/assets** folder in the same root folder as **/src** folder
 - For the program to work, you must have the **PIL** and **Tkinter** libraries installed.
 Additional information for PIL library can be found **[here](http://www.pythonware.com/products/pil/)**.
 **Tkinter** should already be supported natively.
+**psutil** library is not necessary, but it's preferred to have it. If it's not installed, the program will always make two threads instead of the optimal number of them on the current machine.
 - RAM should not be a problem (if you don't want to benchmark), but if you decide to run
 mazes greater than 4000x4000, you will need around 1GB of free RAM memory for best performance.
 
