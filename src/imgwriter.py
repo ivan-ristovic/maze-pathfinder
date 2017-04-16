@@ -84,18 +84,26 @@ class ImageWriter:
 
 		# result_map is needed to store the return value of the function
 		result_map = {}
-		t1 = threading.Thread(target = part_to_pixel_list, args = (result_map, pixel_map, 0, map_size[1]/2, 1, ))
-		t2 = threading.Thread(target = part_to_pixel_list, args = (result_map, pixel_map, map_size[1]/2, map_size[1], 2, ))
+		try:
+			thread_num = psutil.cpu_count()
+		except:
+			thread_num = 2
 
-		t1.start()
-		t2.start()
-
-		t1.join()
-		t2.join()
+		threads = []
+		bottom = 0
+		top = map_size[1]/thread_num
+		for i in range(thread_num):
+			threads.append(threading.Thread(target = part_to_pixel_list, args = (result_map, pixel_map, bottom, top, i, )))
+			bottom = top
+			top = (i+2) * map_size[1] / thread_num
+		for t in threads:
+			t.start()
+		for t in threads:
+			t.join()
 
 		pixel_list = []
-		pixel_list += result_map[1]
-		pixel_list += result_map[2]
+		for i in range(thread_num):
+			pixel_list += result_map[i]
 
 		return pixel_list
 
@@ -117,26 +125,13 @@ class ImageWriter:
 		threads = []
 		bottom = 0;
 		top = map_size[1]/thread_num
-		print "Creating {0:d} threads...".format(thread_num),
+		# print "Creating {0:d} threads...".format(thread_num),
 		for i in range(thread_num):
 			threads.append(threading.Thread(target = reset_map_part, args = (pixel_map, bottom, top, map_size[0], ) ))
 			bottom = top
 			top = (i+2) * map_size[1] / thread_num
-		print "Done!"
-		print "Starting threads...",
 		for t in threads:
 			t.start()
 
-		print "Done!"
-		print "Joining threads...",
 		for t in threads:
 			t.join()
-		print "Done!"
-
-		#t1 = threading.Thread(target = reset_map_part, args = (pixel_map, 0, map_size[1]/2, map_size[0], ) )
-		#t2 = threading.Thread(target = reset_map_part, args = (pixel_map, map_size[1]/2, map_size[1], map_size[0], ))
-
-		#t1.start()
-		#t2.start()
-		#t1.join()
-		#t2.join()
