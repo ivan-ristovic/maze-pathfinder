@@ -23,19 +23,30 @@ class ImageLoader:
 
 		# Creating a one-filled pixel map (1 for white (hall), 0 for non-white (wall))
 		self.pixel_map = [[1 for i in range(self.w)] for j in range(self.h)]
+		# Determing the number of threads (hardware dependant)
+		try:
+			thread_num = psutil.cpu_count()
+		except:
+			thread_num = 2
 
+		threads = []
+		bottom = 0
+		top = self.h/thread_num
+		index = 0
 		# Using threads to convert pixel_list into the pixel_map
 		# print "Creating threads..."
-		t1 = threading.Thread(target = self.fill_out_pixel_map, args = (pixel_list, 0, self.h/2, 0,))
-		t2 = threading.Thread(target = self.fill_out_pixel_map, args = (pixel_list, self.h/2, self.h, self.h/2*self.w,))
-
+		for i in range(thread_num):
+			threads.append(threading.Thread(target = self.fill_out_pixel_map, args = (pixel_list, bottom, top, index, )))
+			bottom = top
+			top = (i+2) * self.h / thread_num
+			index = bottom * self.w
 		# print "Starting threads..."
-		t1.start()
-		t2.start()
+		for t in threads:
+			t.start()
 		# Waiting for the threads to finish
 		# Program will continue to execute when both threads are finished
-		t1.join()
-		t2.join()
+		for t in threads:
+			t.join()
 		# print "Threads are finished!"
 
 	# Prints the pixel_map
