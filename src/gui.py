@@ -343,8 +343,16 @@ class Application(Tkinter.Tk):
 
 		# Creating graph
 		graph_time_start = time.time()
-		self.perform_process(lambda: self.create_graph(), "Creating graph...")
-		if self.grp is None:
+		try:
+			self.perform_process(lambda: self.create_graph(), "Creating graph...")
+			if self.grp.nodes_num is None:
+				raise Exception
+		except:
+			tkMessageBox.showerror("Error",
+				"Invalid image!\n" +
+				"Image must have a black border and only one entry and exit point\n" +
+				"Also, the exit point must not have a black square above it."
+			)
 			return
 		graph_time_end = time.time()
 
@@ -372,15 +380,7 @@ class Application(Tkinter.Tk):
 
 
 	def create_graph(self):
-		try:
-			self.grp = graph.Graph(self.img.pixel_map, self.img.h, self.img.w)
-		except:
-			tkMessageBox.showerror("Error",
-				"Invalid image!\n" +
-				"Image must have a black border and only one entry and exit point\n" +
-				"Also, the exit point must not have a black square above it."
-			)
-			self.grp = None
+		self.grp = graph.Graph(self.img.pixel_map, self.img.h, self.img.w)
 
 
 	def btn_solve_on_click(self):
@@ -389,14 +389,8 @@ class Application(Tkinter.Tk):
 			tkMessageBox.showerror("Error", "Please load a maze first!")
 			return
 
-		try:
-			self.perform_process(lambda: self.traverse_graph(), "Traversing graph...")
-			if self.path is None or self.path == []:
-				raise Exception
-			self.perform_process(lambda: self.write_to_file(), "Writing to file...")
-		except:
-			tkMessageBox.showerror("Error", "Graph traversing failed")
-			return
+		self.perform_process(lambda: self.traverse_graph(), "Traversing graph...")
+		self.perform_process(lambda: self.write_to_file(), "Writing to file...")
 
 		tkMessageBox.showinfo("Info",
 			"Solved the maze in " + str(self.steps) + " steps!\n" +
@@ -434,14 +428,13 @@ class Application(Tkinter.Tk):
 		self.traverse_time_start = time.time()
 
 		self.path, self.steps = self.graph_traverser.traverse()
+		if self.path == []:
+			tkMessageBox.showerror("Error", "Graph traversing failed")
 
 		self.traverse_time_end = time.time()
 
 
 	def write_to_file(self):
-
-		if self.path is None or self.path == []:
-				return
 
 		self.imgwrite_time_start = time.time()
 		# Creating new image writer so we can write our new image to the file
