@@ -1,6 +1,10 @@
 from PIL import Image
 import filepath
 import threading
+try:
+	import psutil
+except Exception as e:
+	print str(e)
 
 class ImageWriter:
 
@@ -105,10 +109,34 @@ class ImageWriter:
 					if pixel_map[x][y] >= 2:
 						pixel_map[x][y] = 1
 
-		t1 = threading.Thread(target = reset_map_part, args = (pixel_map, 0, map_size[1]/2, map_size[0], ) )
-		t2 = threading.Thread(target = reset_map_part, args = (pixel_map, map_size[1]/2, map_size[1], map_size[0], ))
+		try:
+			thread_num = psutil.cpu_count()
+		except:
+			thread_num = 2
 
-		t1.start()
-		t2.start()
-		t1.join()
-		t2.join()
+		threads = []
+		bottom = 0;
+		top = map_size[1]/thread_num
+		print "Creating {0:d} threads...".format(thread_num),
+		for i in range(thread_num):
+			threads.append(threading.Thread(target = reset_map_part, args = (pixel_map, bottom, top, map_size[0], ) ))
+			bottom = top
+			top = (i+2) * map_size[1] / thread_num
+		print "Done!"
+		print "Starting threads...",
+		for t in threads:
+			t.start()
+
+		print "Done!"
+		print "Joining threads...",
+		for t in threads:
+			t.join()
+		print "Done!"
+
+		#t1 = threading.Thread(target = reset_map_part, args = (pixel_map, 0, map_size[1]/2, map_size[0], ) )
+		#t2 = threading.Thread(target = reset_map_part, args = (pixel_map, map_size[1]/2, map_size[1], map_size[0], ))
+
+		#t1.start()
+		#t2.start()
+		#t1.join()
+		#t2.join()
