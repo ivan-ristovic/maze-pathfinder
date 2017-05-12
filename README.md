@@ -2,6 +2,10 @@
 ![ss](https://raw.githubusercontent.com/ivan-ristovic/maze-pathfinder/master/mazes/feature_maze.bmp)
 ![ss](https://raw.githubusercontent.com/ivan-ristovic/maze-pathfinder/master/screenshots/feature_gui.PNG)
 
+## :construction_worker_man: Created by: 
+- [Milana Kovacevic](https://github.com/milana-kovacevic)
+- [Ivan Ristovic](https://github.com/ivan-ristovic)
+
 ## :page_facing_up: Description
 This is a simple program that takes maze input in form of an image and solves it using the
 algorithm of your choice.
@@ -28,6 +32,14 @@ You must have the **/assets** folder in the same root folder as **/src** folder
 - Python 2.7 (although it should work for 2.5 and above, but not tested)
 - Windows or Linux OS (MacOS is not supported)
 - For the program to work, you must have the **PIL** and **Tkinter** libraries installed.
+You can install packages using **pip**, for example:
+```
+$ sudo pip install python-pil
+```
+```
+$ sudo pip install python-psutil
+```
+
 Additional information for PIL library can be found **[here](http://www.pythonware.com/products/pil/)**.
 **Tkinter** should already be supported natively.
 **psutil** library is not necessary, but it's preferred to have it. If it's not installed, the program will always make two threads instead of the optimal number of them on the current machine.
@@ -48,3 +60,4 @@ the format: **generator_<size>**.
 
 ## :bug: Known bugs
 None so far!
+
